@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:score="http://thymeleafexamples">
+<head th:insert="~{fragments.html :: headerContent}"></head>
+<body>
+<div th:insert="~{fragments.html :: navegacion}"></div>
+<div class="container">
+    <main style="margin-top: 5em; margin-bottom: 5em; display: flex; align-items: center; justify-content: center">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">No DE CASO</th>
+                    <th scope="col">DESCRIPCION</th>
+                    <th scope="col">DIRECCION</th>
+                    <th scope="col">REFERENCIA</th>
+                    <th scope="col">FECHA</th>
+                    <th scope="col">CATEGORIA</th>
+                    <th scope="col">ESTADO</th>
+                    <th scope="col">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="incidente: ${listadoIncidentes}">
+                    <th scope="row" th:text="${incidente.getId()}"></th>
+                    <td th:text="${incidente.getDescripcion()}"></td>
+                    <td th:text="${incidente.getDireccion()}"></td>
+                    <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
+                    <td th:text="${incidente.getFecha()}"></td>
+                    <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
+                    <td th:text="${incidente.getEstado()}"></td>
+                    <td>
+                        <div class="row">
+                            <a th:href="@{'/casos/edit/' + ${incidente.getId()}}">
+                                <button type="button" class="btn btn-outline-primary"><i class="fa-solid fa-pencil"></i> EDITAR</button>
+                            </a>
+                            <a th:href="@{'/casos/delete/' + ${incidente.getId()}}">
+                                <button type="button" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> ELIMINAR</button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+<footer th:insert="~{fragments.html :: footer}"></footer>
+<div th:insert="~{fragments.html :: scripts}"></div>
+</body>
+</html>
