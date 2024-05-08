@@ -21,7 +21,7 @@ public class CasosConstroller {
     public ModelAndView allCases(){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/casos/listar");
-        List<Incidente> listadoIncidentes = incidenteService.getAllIncidentes();
+        List<Incidente> listadoIncidentes = incidenteService.getAllIncidentes(0);
         mv.addObject("listadoIncidentes", listadoIncidentes);
         return mv;
     }

@@ -13,21 +13,21 @@ import java.util.List;
 @Repository
 public interface IncidenteRepository extends JpaRepository<Incidente,Long> {
 
-    List<Incidente> findByDescripcionContainingIgnoreCase(String descripcion);
+    List<Incidente> findByDescripcionContainingIgnoreCaseAndEstadoNot(String descripcion, Integer estado);
 
-    List<Incidente> findAllByOrderByIdDesc();
+    List<Incidente> findByEstadoNotOrderByIdDesc(Integer estado);
 
-    List<Incidente> findByDireccionContainingIgnoreCase(String direccion);
+    List<Incidente> findByDireccionContainingIgnoreCaseAndEstadoNot(String direccion, Integer estado);
 
-    List<Incidente> findByReferenciaDeDireccionContainingIgnoreCase(String referencia);
+    List<Incidente> findByReferenciaDeDireccionContainingIgnoreCaseAndEstadoNot(String referencia, Integer estado);
 
-    List<Incidente> findByFechaBetween(Instant fechaInicial, Instant fechaFinal);
+    List<Incidente> findByFechaBetweenAndEstadoNot(Instant fechaInicial, Instant fechaFinal, Integer estado);
 
     List<Incidente> findByEstado(Integer estado);
 
-    List<Incidente> findByIdCategoria(CategoriaIncidente categoriaIncidente);
+    List<Incidente> findByIdCategoriaAndEstadoNot(CategoriaIncidente categoriaIncidente, Integer estado);
 
-    List<Incidente> findByIdCiudadano(Ciudadano ciudadano);
+    List<Incidente> findByIdCiudadanoAndEstadoNot(Ciudadano ciudadano, Integer estado);
 
-
+    Incidente findByIdAndEstadoNot(Long id, Integer estado);
 }

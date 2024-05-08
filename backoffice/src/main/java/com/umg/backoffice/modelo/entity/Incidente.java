@@ -65,6 +65,7 @@ public class Incidente {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_categoria", nullable = false)
+    @JsonBackReference
     private CategoriaIncidente idCategoria;
 
     @NotNull

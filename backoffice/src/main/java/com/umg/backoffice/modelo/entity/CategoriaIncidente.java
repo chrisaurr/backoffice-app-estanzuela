@@ -1,5 +1,6 @@
 package com.umg.backoffice.modelo.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,7 @@ public class CategoriaIncidente {
     private Integer estado;
 
     @OneToMany(mappedBy = "idCategoria")
+    @JsonManagedReference
     private Set<Incidente> incidentes = new LinkedHashSet<>();
 
     public Long getId() {

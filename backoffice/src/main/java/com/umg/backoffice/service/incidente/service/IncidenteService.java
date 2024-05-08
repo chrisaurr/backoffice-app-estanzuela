@@ -20,8 +20,8 @@ public class IncidenteService implements InterfaceForIncidenteService {
 
     @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getAllIncidentes() {
-        return incidenteRepository.findAllByOrderByIdDesc();
+    public List<Incidente> getAllIncidentes(Integer estado) {
+        return incidenteRepository.findByEstadoNotOrderByIdDesc(estado);
     }
 
     @Transactional
@@ -46,39 +46,51 @@ public class IncidenteService implements InterfaceForIncidenteService {
         else return true;
     }
 
+    @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getIncidentesByDescripcion(String descripcion) {
-        return List.of();
+    public List<Incidente> getIncidentesByDescripcion(String descripcion, Integer estado) {
+        return incidenteRepository.findByDescripcionContainingIgnoreCaseAndEstadoNot(descripcion, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getIncidentesByDireccion(String direccion) {
-        return List.of();
+    public List<Incidente> getIncidentesByDireccion(String direccion, Integer estado) {
+        return incidenteRepository.findByDireccionContainingIgnoreCaseAndEstadoNot(direccion, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getIncidentesByReferenciaDeDireccion(String referenciaDeDireccion) {
-        return List.of();
+    public List<Incidente> getIncidentesByReferenciaDeDireccion(String referenciaDeDireccion, Integer estado) {
+        return incidenteRepository.findByReferenciaDeDireccionContainingIgnoreCaseAndEstadoNot(referenciaDeDireccion, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getIncidentesByFechaBetween(Instant fechaInicio, Instant fechaFin) {
-        return List.of();
+    public List<Incidente> getIncidentesByFechaBetween(Instant fechaInicio, Instant fechaFin, Integer estado) {
+        return incidenteRepository.findByFechaBetweenAndEstadoNot(fechaInicio, fechaFin, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
     public List<Incidente> getIncidentesByEstado(Integer estado) {
-        return List.of();
+        return incidenteRepository.findByEstado(estado);
+    }
+
+    @Transactional(readOnly=true)
+    @Override
+    public List<Incidente> getIncidentesByCategoria(CategoriaIncidente categoriaIncidente, Integer estado) {
+        return incidenteRepository.findByIdCategoriaAndEstadoNot(categoriaIncidente, estado);
+    }
+
+    @Transactional(readOnly=true)
+    @Override
+    public List<Incidente> getIncidentesByCiudadano(Ciudadano ciudadano, Integer estado) {
+        return incidenteRepository.findByIdCiudadanoAndEstadoNot(ciudadano, estado);
     }
 
     @Override
-    public List<Incidente> getIncidentesByCategoria(CategoriaIncidente categoriaIncidente) {
-        return List.of();
-    }
-
-    @Override
-    public List<Incidente> getIncidentesByCiudadano(Ciudadano ciudadano) {
-        return List.of();
+    public Incidente getIncidenteById(Long id, Integer estado) {
+        return incidenteRepository.findByIdAndEstadoNot(id, estado);
     }
 
 }
