@@ -26,15 +26,23 @@
                     <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
                     <td th:text="${incidente.getFecha()}"></td>
                     <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
-                    <td th:text="${incidente.getEstado()}"></td>
+                    <td th:if="${incidente.getEstado() == 1}">Sin proceso</td>
+                    <td th:if="${incidente.getEstado() == 2}">Solucionado</td>
+                    <td th:if="${incidente.getEstado() == 3}">No aplica</td>
                     <td>
-                        <div class="row">
-                            <a th:href="@{'/casos/edit/' + ${incidente.getId()}}">
-                                <button type="button" class="btn btn-outline-primary"><i class="fa-solid fa-pencil"></i> EDITAR</button>
-                            </a>
-                            <a th:href="@{'/casos/delete/' + ${incidente.getId()}}">
-                                <button type="button" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> ELIMINAR</button>
-                            </a>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary">Cambiar estado</button>
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</a></li>
+                                <li><a class="dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" th:href="'/casos/detalle/' + ${incidente.getId()}">Ver Detalle</a></li>
+                            </ul>
                         </div>
                     </td>
                 </tr>
@@ -44,5 +52,59 @@
 </div>
 <footer th:insert="~{fragments.html :: footer}"></footer>
 <div th:insert="~{fragments.html :: scripts}"></div>
+
+<script type="text/javascript">
+    const consultarCambiarEstadoSolucionado = id => {
+        Swal.fire({
+            title: "Seguro que deseas cambiar a solucionado?",
+            showDenyButton: true,
+            confirmButtonText: "Si, Cambiar",
+            denyButtonText: `No, Cancelar`,
+            icon: "question"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire("Confirmado, procediendo", "", "success");
+                let url = '/casos/solucionado/' + id;
+                window.location.href = url;
+            } else if (result.isDenied) {
+                Swal.fire("Cambios cancelados", "", "info");
+            }
+        });
+    }
+    const consultarCambiarEstadoNoAplica = id => {
+        Swal.fire({
+            title: "Seguro que deseas cambiar a estado no aplica?",
+            showDenyButton: true,
+            confirmButtonText: "Si, Cambiar",
+            denyButtonText: `No, Cancelar`,
+            icon: "question"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire("Confirmado, procediendo", "", "success");
+                let url = '/casos/no-aplica/' + id;
+                window.location.href = url;
+            } else if (result.isDenied) {
+                Swal.fire("Cambios cancelados", "", "info");
+            }
+        });
+    }
+    const consultarCambiarEstadoEliminado = id => {
+        Swal.fire({
+            title: "Seguro que deseas eliminar el registro?",
+            showDenyButton: true,
+            confirmButtonText: "Si, Cambiar",
+            denyButtonText: `No, Cancelar`,
+            icon: "question"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire("Confirmado, procediendo", "", "success");
+                let url = '/casos/eliminar/' + id;
+                window.location.href = url;
+            } else if (result.isDenied) {
+                Swal.fire("Cambios cancelados", "", "info");
+            }
+        });
+    }
+</script>
 </body>
 </html>
