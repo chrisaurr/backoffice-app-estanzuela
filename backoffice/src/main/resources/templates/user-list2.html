@@ -42,34 +42,21 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th scope="col">No DE CASO</th>
-                                    <th scope="col">DESCRIPCION</th>
-                                    <th scope="col">DIRECCION</th>
-                                    <th scope="col">REFERENCIA</th>
-                                    <th scope="col">FECHA</th>
-                                    <th scope="col">CATEGORIA</th>
-                                    <th scope="col">ESTADO</th>
-                                    <th scope="col">ACCIONES</th>
+                                    <th style="width: 10px">#</th>
+                                    <th>Username</th>
+                                    <th>EMail</th>
+                                    <th style="width: 40px">Label</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="incidente: ${listadoIncidentes}">
-                                    <th scope="row" th:text="${incidente.getId()}"></th>
-                                    <td th:text="${incidente.getDescripcion()}"></td>
-                                    <td th:text="${incidente.getDireccion()}"></td>
-                                    <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
-                                    <td th:text="${incidente.getFecha()}"></td>
-                                    <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
-                                    <td th:text="${incidente.getEstado()}"></td>
-                                    <td>
-                                        <div class="row">
-                                            <a th:href="@{'/casos/edit/' + ${incidente.getId()}}">
-                                                <button type="button" class="btn btn-outline-primary"><i class="fa-solid fa-pencil"></i> EDITAR</button>
-                                            </a>
-                                            <a th:href="@{'/casos/delete/' + ${incidente.getId()}}">
-                                                <button type="button" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> ELIMINAR</button>
-                                            </a>
-                                        </div>
+                                <tr th:each="u : ${users}">
+                                    <td scope="col" th:text="${u.id}"></td>
+                                    <td scope="col" th:text="${u.username}"></td>
+                                    <td scope="col" th:text="${u.email}"></td>
+
+                                    <td scope="col">
+                                        <a class="btn btn-primary" role="button" th:href="${'/edit/'+u.id}"><span>Edit</span></a>
+                                        <a class="btn btn-danger" role="button" th:href="${'/hapus/'+u.id}"><span>Remove</span></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -99,7 +86,58 @@
 
 
 <th:block layout:fragment="script">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+        console.log("List User");
+        var user = {};
+
+        $(document).ready(function () {
+
+            /** TODO: Function OnClick **/
+
+
+            /** TODO: Function **/
+
+
+            /** TODO: OnLoad **/
+            user.findAll = function () {
+
+                $.ajax({
+                    url: "http://localhost:1111/api/v1/user",
+                    type: "GET",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Accept", "application/json");
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        var event_data = '';
+                        $.each(data.user, function (index, value) {
+                            /*console.log(value);*/
+                            event_data += '<tr>';
+                            event_data += '<td>' + value.name + '</td>';
+                            event_data += '<td>' + value.id + '</td>';
+                            event_data += '</tr>';
+                        });
+                        $("#list_table_json").append(event_data);
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var responseText = jQuery.parseJSON(jqXHR.responseText);
+                        console.log(responseText);
+                        console.log('Error: ' + textStatus + ' - ' + errorThrown);
+                    }
+                });
+
+            };
+
+            user.findAll();
+
+
+        });
+    </script>
 </th:block>
 
 </body>

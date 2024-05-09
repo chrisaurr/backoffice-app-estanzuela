@@ -4,10 +4,16 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "categoria_incidente", schema = "estanzuela")
 public class CategoriaIncidente {
@@ -28,37 +34,5 @@ public class CategoriaIncidente {
     @OneToMany(mappedBy = "idCategoria")
     @JsonManagedReference
     private Set<Incidente> incidentes = new LinkedHashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Set<Incidente> getIncidentes() {
-        return incidentes;
-    }
-
-    public void setIncidentes(Set<Incidente> incidentes) {
-        this.incidentes = incidentes;
-    }
 
 }

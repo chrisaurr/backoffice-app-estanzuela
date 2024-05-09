@@ -3,10 +3,16 @@ package com.umg.backoffice.modelo.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "entidad", schema = "estanzuela")
 public class Entidad {
@@ -45,69 +51,5 @@ public class Entidad {
 
     @OneToMany(mappedBy = "idEntidad")
     private Set<Usuario> usuarios = new LinkedHashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreEntidad() {
-        return nombreEntidad;
-    }
-
-    public void setNombreEntidad(String nombreEntidad) {
-        this.nombreEntidad = nombreEntidad;
-    }
-
-    public String getDireccionEntidad() {
-        return direccionEntidad;
-    }
-
-    public void setDireccionEntidad(String direccionEntidad) {
-        this.direccionEntidad = direccionEntidad;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getLogoUrl() {
-        return logoUrl;
-    }
-
-    public void setLogoUrl(String logoUrl) {
-        this.logoUrl = logoUrl;
-    }
-
-    public String getKeyMapas() {
-        return keyMapas;
-    }
-
-    public void setKeyMapas(String keyMapas) {
-        this.keyMapas = keyMapas;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
 
 }
