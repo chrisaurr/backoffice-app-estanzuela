@@ -2,6 +2,7 @@ package com.umg.backoffice.service.incidente.service;
 
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Ciudadano;
+import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.repository.IncidenteRepository;
 import com.umg.backoffice.service.incidente.interfaces.InterfaceForIncidenteService;
@@ -27,7 +28,7 @@ public class IncidenteService implements InterfaceForIncidenteService {
     @Transactional
     @Override
     public Boolean updateEstadoIncidente(Long id, Integer estado) {
-        Incidente incidente = incidenteRepository.findById(id).orElse(null);
+        Incidente incidente = incidenteRepository.findByIdAndEstadoNot(id, Constants.ESTADO_ELIMINADO);
         if(incidente == null)return false;
         incidente.setEstado(estado);
         Incidente incidenteActualizado = incidenteRepository.save(incidente);
@@ -38,7 +39,7 @@ public class IncidenteService implements InterfaceForIncidenteService {
     @Transactional
     @Override
     public Boolean updateCantidadAtendidos(Long id, Integer cantidadAtendidos) {
-        Incidente incidente = incidenteRepository.findById(id).orElse(null);
+        Incidente incidente = incidenteRepository.findByIdAndEstadoNot(id, Constants.ESTADO_ELIMINADO);
         if(incidente == null)return false;
         incidente.setCantidadAtendidos(cantidadAtendidos);
         Incidente incidenteActualizado = incidenteRepository.save(incidente);

@@ -1,12 +1,95 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{fragments.html :: headerContent}"></head>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DETALLE DE DENUNCIA</title>
+</head>
 <body>
-    <div th:insert="~{fragments.html :: navegacion}"></div>
-    <h1>Mapa de Google con Marcador</h1>
-    <div style="height: 400px; width: 100%" id="map"></div>
-    <footer th:insert="~{fragments.html :: footer}"></footer>
-    <div th:insert="~{fragments.html :: scripts}"></div>
+
+<div layout:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>DETALLE DE DENUNCIA</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Simple Tables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">DETALLE DE INCIDENTE</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="numeroCaso" class="col-form-label">Numero de caso</label>
+                                    <!--<label class="form-control" th:text="${incidente.getId()}"></label>-->
+                                    <input readonly type="text" id="numeroCaso" class="form-control" th:value="${incidente.getId()}">
+                                </div>
+                                <div class="col-md-10">
+                                    <label for="descripcionCaso" class="col-form-label">Descripcion</label>
+                                    <input readonly type="text" id="descripcionCaso" class="form-control" th:value="${incidente.getDescripcion()}">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="direccionCaso" class="col-form-label">Direccion</label>
+                                    <input readonly type="text" id="direccionCaso" class="form-control" th:value="${incidente.getDireccion()}">
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="referenciaDireccion" class="col-form-label">Referencia de direccion</label>
+                                    <input readonly type="text" id="referenciaDireccion" class="form-control" th:value="${incidente.getReferenciaDeDireccion()}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="fechaCaso" class="col-form-label">Fecha</label>
+                                    <input readonly type="text" id="fechaCaso" class="form-control" th:value="${incidente.getFecha()}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="estadoCaso" class="col-form-label">Estado</label>
+                                    <input th:if="${incidente.getEstado() == 1}" readonly value="Sin proceso" type="text" id="estadoCaso" class="form-control">
+                                    <input th:if="${incidente.getEstado() == 2}" readonly value="Solucionado" type="text" id="estadoCaso" class="form-control">
+                                    <input th:if="${incidente.getEstado() == 3}" readonly value="No aplica" type="text" id="estadoCaso" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="cantidadAtendidos" class="col-form-label">Cantidad atendidos</label>
+                                    <input readonly type="text" id="cantidadAtendidos" class="form-control" th:value="${incidente.getCantidadAtendidos()}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="categoria" class="col-form-label">Categoria</label>
+                                    <input readonly type="text" id="categoria" class="form-control" th:value="${incidente.getIdCategoria.getNombre()}">
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="ciudadano" class="col-form-label">Ciudadano</label>
+                                    <input readonly type="text" id="ciudadano" class="form-control" th:value="${incidente.getIdCiudadano.getNombres()}">
+                                </div>
+                            </div>
+                            <hr/>
+                            <div style="height: 400px; width: 100%" id="map"></div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- Main content -->
+
+</div>
+<th:block layout:fragment="script">
     <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqCX5ejILCSnTL2e3dKiar0YWngOYS_SI&callback=initMap&v=weekly&libraries=marker"
             defer
@@ -30,5 +113,6 @@
         }
         initMap();
     </script>
+</th:block>
 </body>
 </html>
