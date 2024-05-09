@@ -3,10 +3,16 @@ package com.umg.backoffice.modelo.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "roles", schema = "estanzuela")
 public class Role {
@@ -26,37 +32,5 @@ public class Role {
 
     @OneToMany(mappedBy = "idRol")
     private Set<Usuario> usuarios = new LinkedHashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreRol() {
-        return nombreRol;
-    }
-
-    public void setNombreRol(String nombreRol) {
-        this.nombreRol = nombreRol;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
 
 }

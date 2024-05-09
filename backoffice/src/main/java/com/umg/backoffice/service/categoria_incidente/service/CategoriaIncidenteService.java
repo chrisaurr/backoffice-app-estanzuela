@@ -1,6 +1,7 @@
 package com.umg.backoffice.service.categoria_incidente.service;
 
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
+import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.repository.CategoriaIncidenteRepository;
 import com.umg.backoffice.service.categoria_incidente.interfaces.InterfaceForCategoriaIncidenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CategoriaIncidenteService implements InterfaceForCategoriaIncidenteService {

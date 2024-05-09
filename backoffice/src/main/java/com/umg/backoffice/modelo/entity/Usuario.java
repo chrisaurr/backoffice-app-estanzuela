@@ -4,11 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "usuarios", schema = "estanzuela", indexes = {
         @Index(name = "usuarios_roles_FK", columnList = "id_rol"),
@@ -77,117 +83,5 @@ public class Usuario {
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<AsignacionIncidente> asignacionIncidentes = new LinkedHashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Instant getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Instant fecha) {
-        this.fecha = fecha;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public Role getIdRol() {
-        return idRol;
-    }
-
-    public void setIdRol(Role idRol) {
-        this.idRol = idRol;
-    }
-
-    public AreaTrabajo getIdAreaTrabajo() {
-        return idAreaTrabajo;
-    }
-
-    public void setIdAreaTrabajo(AreaTrabajo idAreaTrabajo) {
-        this.idAreaTrabajo = idAreaTrabajo;
-    }
-
-    public Entidad getIdEntidad() {
-        return idEntidad;
-    }
-
-    public void setIdEntidad(Entidad idEntidad) {
-        this.idEntidad = idEntidad;
-    }
-
-    public Set<AsignacionIncidente> getAsignacionIncidentes() {
-        return asignacionIncidentes;
-    }
-
-    public void setAsignacionIncidentes(Set<AsignacionIncidente> asignacionIncidentes) {
-        this.asignacionIncidentes = asignacionIncidentes;
-    }
 
 }
