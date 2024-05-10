@@ -3,6 +3,8 @@ package com.umg.backoffice.repository;
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Ciudadano;
 import com.umg.backoffice.modelo.entity.Incidente;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +18,8 @@ public interface IncidenteRepository extends JpaRepository<Incidente,Long> {
 
     List<Incidente> findByDescripcionContainingIgnoreCaseAndEstadoNot(String descripcion, Integer estado);
 
-    List<Incidente> findByEstadoNotOrderByIdDesc(Integer estado);
+    //List<Incidente> findByEstadoNotOrderByIdDesc(Integer estado, Pageable pageable);
+    Page<Incidente> findByEstadoNotOrderByIdDesc(Integer estado, Pageable pageable);
 
     List<Incidente> findByDireccionContainingIgnoreCaseAndEstadoNot(String direccion, Integer estado);
 
@@ -37,17 +40,15 @@ public interface IncidenteRepository extends JpaRepository<Incidente,Long> {
             "(:estado IS NULL OR p.estado = :estado) AND " +
             "(:categoria IS NULL OR p.idCategoria = :categoria) AND " +
             "(:fechaInicial IS NULL OR p.fecha >= :fechaInicial) AND " +
-            "(:fechaFinal IS NULL OR p.fecha <= :fechaFinal)")
-    List<Incidente> busquedaCompuesta(
+            "(:fechaFinal IS NULL OR p.fecha <= :fechaFinal) " +
+            "ORDER BY p.id DESC")
+    Page<Incidente> busquedaCompuesta(
             @Param("descripcion") String descripcion,
             @Param("direccion") String direccion,
             @Param("estado") Integer estado,
             @Param("categoria") CategoriaIncidente categoriaIncidente,
             @Param("fechaInicial") Instant fechaInicial,
-            @Param("fechaFinal") Instant fechaFinal
+            @Param("fechaFinal") Instant fechaFinal,
+            Pageable pageable
     );
 }
-/***
- *
- *                         @Param("categoria") Integer categoria,
- */

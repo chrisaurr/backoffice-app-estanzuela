@@ -5,11 +5,15 @@ import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.service.categoria_incidente.service.CategoriaIncidenteService;
 import com.umg.backoffice.service.incidente.service.IncidenteService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +27,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/casos")
@@ -37,16 +43,24 @@ public class CasosConstroller {
     private Integer resultado = 0;
 
     @GetMapping("/all")
-    public ModelAndView allCases() {
+    public ModelAndView allCases(@RequestParam(name = "page", defaultValue = "0")int page) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/casos/listar");
-        List<Incidente> listadoIncidentes = incidenteService.getAllIncidentes(Constants.ESTADO_ELIMINADO);
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Incidente> listadoIncidentes = incidenteService.getAllIncidentes(Constants.ESTADO_ELIMINADO, pageable);
+        int totalPages = listadoIncidentes.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            mv.addObject("pageNumbers", pageNumbers);
+        }
         List<CategoriaIncidente> allCategorias = categoriaIncidenteService.getAllCategoriaIncidente(Constants.ESTADO_ELIMINADO);
         mv.addObject("listadoIncidentes", listadoIncidentes);
         mv.addObject("actualizado", resultado);
         mv.addObject("allCategorias", allCategorias);
+        mv.addObject("url", "all");
         resultado = 0;
-        System.out.println("TAMANIO: " + listadoIncidentes.size());
         return mv;
     }
 
@@ -133,10 +147,20 @@ public class CasosConstroller {
             @RequestParam("filtro_estado") Integer estado,
             @RequestParam("filtro_categoria") Long categoria,
             @RequestParam("filtro_fecha_inicio") String fechaInicio,
-            @RequestParam("filtro_fecha_final") String fechaFin)
+            @RequestParam("filtro_fecha_final") String fechaFin,
+            @RequestParam(name = "page", defaultValue = "0")int page,
+            HttpServletRequest request
+    )
     {
+        String dataActual = "?filtro_descripcion="+descripcion+
+                "&filtro_direccion="+direccion+
+                "&filtro_estado="+estado+
+                "&filtro_categoria="+categoria+
+                "&filtro_fecha_inicio="+fechaInicio+"" +
+                "&filtro_fecha_final="+fechaFin;
         Instant fechaInicial = null;
         Instant fechaFinal = null;
+        CategoriaIncidente categoriaIncidente = null;
         if(!fechaInicio.isBlank()){
             LocalDateTime localDateTimeInicio = LocalDateTime.parse(fechaInicio + "T00:00:00");
             fechaInicial = localDateTimeInicio.toInstant(ZoneOffset.UTC);
@@ -145,24 +169,50 @@ public class CasosConstroller {
             LocalDateTime localDateTimeFinal = LocalDateTime.parse(fechaFin + "T00:00:00");
             fechaFinal = localDateTimeFinal.toInstant(ZoneOffset.UTC);
         }
+        if(estado == 0)estado = null;
+        if(estado != null){
+            if(estado == 4)estado = 0;
+        }
+        if(categoria == 0) categoria = null;
+        if(categoria != null){
+            categoriaIncidente = new CategoriaIncidente();
+            categoriaIncidente.setId(categoria);
+        }
+        Pageable pageable = PageRequest.of(page, 10);
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/casos/listar");
-        CategoriaIncidente categoriaIncidente = new CategoriaIncidente();
-        categoriaIncidente.setId(categoria);
-        List<Incidente> listadoIncidentes = incidenteService.busquedaCompuesta(
+        Page<Incidente> listadoIncidentes = incidenteService.busquedaCompuesta(
                 descripcion,
                 direccion,
                 estado,
                 categoriaIncidente,
                 fechaInicial,
-                fechaFinal
+                fechaFinal,
+                pageable
         );
+        int totalPages = listadoIncidentes.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            mv.addObject("pageNumbers", pageNumbers);
+        }
         List<CategoriaIncidente> allCategorias = categoriaIncidenteService.getAllCategoriaIncidente(Constants.ESTADO_ELIMINADO);
         mv.addObject("listadoIncidentes", listadoIncidentes);
         mv.addObject("actualizado", resultado);
         mv.addObject("allCategorias", allCategorias);
+        mv.addObject("filtroDescripcion", descripcion);
+        mv.addObject("filtroDireccion", direccion);
+        if(estado != null){
+            if(estado == 0)estado = 4;
+        }
+        mv.addObject("filtroEstado", estado);
+        mv.addObject("filtroCategoria", categoria);
+        mv.addObject("filtroFechaInicio", fechaInicio);
+        mv.addObject("filtroFechaFinal", fechaFin);
+        mv.addObject("url", "buscar");
+        mv.addObject("dataActual", dataActual);
         resultado = 0;
-        System.out.println("TAMANIO: " + listadoIncidentes.size());
         return mv;
     }
 }

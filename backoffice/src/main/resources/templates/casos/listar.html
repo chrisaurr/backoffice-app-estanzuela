@@ -39,34 +39,66 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
-                                        <input type="text" class="form-control" id="filtro_descripcion" name="filtro_descripcion">
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="filtro_descripcion"
+                                                name="filtro_descripcion"
+                                                th:value="${filtroDescripcion}"
+                                        >
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label" for="filtro_direccion">Filtrar por direccion</label>
-                                        <input type="text" class="form-control" id="filtro_direccion" name="filtro_direccion">
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="filtro_direccion"
+                                                name="filtro_direccion"
+                                                th:value="${filtroDireccion}"
+                                        >
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label" for="filtro_estado">Filtrar por estado</label>
                                         <select class="form-control" name="filtro_estado" id="filtro_estado">
-                                            <option value=1 >Sin Proceso</option>
-                                            <option value=2 >Solucionado</option>
-                                            <option value=3 >No aplica</option>
-                                            <option value=4 >Eliminado</option><!--se pasa 4 pero en el backend es cero ya que el cero no lo pasa, lo toma como si no hay-->
+                                            <option value=0 >- Seleccionar -</option>
+                                            <option th:selected="${filtroEstado == 1}" value=1 >Sin Proceso</option>
+                                            <option th:selected="${filtroEstado == 2}" value=2 >Solucionado</option>
+                                            <option th:selected="${filtroEstado == 3}" value=3 >No aplica</option>
+                                            <option th:selected="${filtroEstado == 4}" value=4 >Eliminado</option><!--se pasa 4 pero en el backend es cero ya que el cero no lo pasa, lo toma como si no hay-->
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="col-form-label" for="filtro_categoria">Filtrar por categoria</label>
                                         <select class="form-control" name="filtro_categoria" id="filtro_categoria">
-                                            <option th:each="categoria: ${allCategorias}" th:value="${categoria.getId()}" th:text="${categoria.getNombre()}"></option>
+                                            <option value=0 >- Seleccionar -</option>
+                                            <option
+                                                    th:each="categoria: ${allCategorias}"
+                                                    th:value="${categoria.getId()}"
+                                                    th:text="${categoria.getNombre()}"
+                                                    th:selected="${filtroCategoria == categoria.getId()}"
+                                            >
+                                            </option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label" for="filtro_fecha_inicio">Filtrar por fecha inicial</label>
-                                        <input type="date" class="form-control" id="filtro_fecha_inicio" name="filtro_fecha_inicio">
+                                        <input
+                                                type="date"
+                                                class="form-control"
+                                                id="filtro_fecha_inicio"
+                                                name="filtro_fecha_inicio"
+                                                th:value="${filtroFechaInicio}"
+                                        >
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-form-label" for="filtro_fecha_final">Filtrar por fecha final</label>
-                                        <input type="date" class="form-control" id="filtro_fecha_final" name="filtro_fecha_final">
+                                        <input
+                                                type="date"
+                                                class="form-control"
+                                                id="filtro_fecha_final"
+                                                name="filtro_fecha_final"
+                                                th:value="${filtroFechaFinal}"
+                                        >
                                     </div>
                                 </div>
 
@@ -87,7 +119,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="incidente: ${listadoIncidentes}">
+                                <tr th:each="incidente: ${listadoIncidentes.content}">
                                     <th scope="row" th:text="${incidente.getId()}"></th>
                                     <td th:text="${incidente.getDescripcion()}"></td>
                                     <td th:text="${incidente.getDireccion()}"></td>
@@ -125,12 +157,25 @@
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
-                            <ul class="pagination pagination-sm m-0 float-right">
-                                <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+
+                            <ul th:if="${listadoIncidentes.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'?page=0'}" >&laquo;</a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{${dataActual}+'&page=0'}" >&laquo;</a>
+                                    <!--<a class="page-link" th:href="@{'/casos/'+${url}+'?page=0'}" >&laquo;</a>-->
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'/casos/'+${url}+'?page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/'+${url}+${dataActual}+'&page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>
+                                </li>
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{/casos/all(page=${listadoIncidentes.totalPages} - 1)}" >&raquo;</a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/buscar'+${dataActual}+'&page='+(${listadoIncidentes.totalPages} - 1)+''}" >&raquo;</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

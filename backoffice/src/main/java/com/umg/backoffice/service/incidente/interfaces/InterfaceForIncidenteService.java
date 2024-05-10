@@ -3,12 +3,14 @@ package com.umg.backoffice.service.incidente.interfaces;
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Ciudadano;
 import com.umg.backoffice.modelo.entity.Incidente;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
 
 public interface InterfaceForIncidenteService {
-    List<Incidente> getAllIncidentes(Integer estado);
+    Page<Incidente> getAllIncidentes(Integer estado, Pageable pageable);
 
     Boolean updateEstadoIncidente(Long id, Integer estado);
 
@@ -30,5 +32,5 @@ public interface InterfaceForIncidenteService {
 
     Incidente getIncidenteById(Long id, Integer estado);
 
-    List<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin);
+    Page<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin, Pageable pageable);
 }

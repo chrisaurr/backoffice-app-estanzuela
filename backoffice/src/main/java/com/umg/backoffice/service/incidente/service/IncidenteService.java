@@ -7,6 +7,8 @@ import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.repository.IncidenteRepository;
 import com.umg.backoffice.service.incidente.interfaces.InterfaceForIncidenteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +23,8 @@ public class IncidenteService implements InterfaceForIncidenteService {
 
     @Transactional(readOnly=true)
     @Override
-    public List<Incidente> getAllIncidentes(Integer estado) {
-        return incidenteRepository.findByEstadoNotOrderByIdDesc(estado);
+    public Page<Incidente> getAllIncidentes(Integer estado, Pageable pageable) {
+        return incidenteRepository.findByEstadoNotOrderByIdDesc(estado, pageable);
     }
 
     @Transactional
@@ -95,8 +97,8 @@ public class IncidenteService implements InterfaceForIncidenteService {
     }
 
     @Override
-    public List<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin) {
-        return incidenteRepository.busquedaCompuesta(descripcion, direccion, estado, categoriaIncidente, fechaInicio, fechaFin);
+    public Page<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin, Pageable pageable) {
+        return incidenteRepository.busquedaCompuesta(descripcion, direccion, estado, categoriaIncidente, fechaInicio, fechaFin, pageable);
     }
 
 }
