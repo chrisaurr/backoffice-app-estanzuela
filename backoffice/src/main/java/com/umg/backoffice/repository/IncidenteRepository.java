@@ -4,6 +4,8 @@ import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Ciudadano;
 import com.umg.backoffice.modelo.entity.Incidente;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -29,4 +31,23 @@ public interface IncidenteRepository extends JpaRepository<Incidente,Long> {
     List<Incidente> findByIdCiudadanoAndEstadoNot(Ciudadano ciudadano, Integer estado);
 
     Incidente findByIdAndEstadoNot(Long id, Integer estado);
+
+    @Query("SELECT p FROM Incidente p WHERE (:descripcion IS NULL OR LOWER(p.descripcion) LIKE LOWER(CONCAT('%', :descripcion, '%'))) AND " +
+            "(:direccion IS NULL OR LOWER(p.direccion) LIKE LOWER(CONCAT('%', :direccion, '%'))) AND " +
+            "(:estado IS NULL OR p.estado = :estado) AND " +
+            "(:categoria IS NULL OR p.idCategoria = :categoria) AND " +
+            "(:fechaInicial IS NULL OR p.fecha >= :fechaInicial) AND " +
+            "(:fechaFinal IS NULL OR p.fecha <= :fechaFinal)")
+    List<Incidente> busquedaCompuesta(
+            @Param("descripcion") String descripcion,
+            @Param("direccion") String direccion,
+            @Param("estado") Integer estado,
+            @Param("categoria") CategoriaIncidente categoriaIncidente,
+            @Param("fechaInicial") Instant fechaInicial,
+            @Param("fechaFinal") Instant fechaFinal
+    );
 }
+/***
+ *
+ *                         @Param("categoria") Integer categoria,
+ */

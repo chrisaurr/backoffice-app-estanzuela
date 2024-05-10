@@ -94,4 +94,9 @@ public class IncidenteService implements InterfaceForIncidenteService {
         return incidenteRepository.findByIdAndEstadoNot(id, estado);
     }
 
+    @Override
+    public List<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin) {
+        return incidenteRepository.busquedaCompuesta(descripcion, direccion, estado, categoriaIncidente, fechaInicio, fechaFin);
+    }
+
 }

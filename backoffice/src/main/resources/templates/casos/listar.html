@@ -34,11 +34,45 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Bordered Table</h3>
-                        </div>
-                        <!-- /.card-header -->
                         <div class="card-body">
+                            <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
+                                        <input type="text" class="form-control" id="filtro_descripcion" name="filtro_descripcion">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_direccion">Filtrar por direccion</label>
+                                        <input type="text" class="form-control" id="filtro_direccion" name="filtro_direccion">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_estado">Filtrar por estado</label>
+                                        <select class="form-control" name="filtro_estado" id="filtro_estado">
+                                            <option value=1 >Sin Proceso</option>
+                                            <option value=2 >Solucionado</option>
+                                            <option value=3 >No aplica</option>
+                                            <option value=4 >Eliminado</option><!--se pasa 4 pero en el backend es cero ya que el cero no lo pasa, lo toma como si no hay-->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_categoria">Filtrar por categoria</label>
+                                        <select class="form-control" name="filtro_categoria" id="filtro_categoria">
+                                            <option th:each="categoria: ${allCategorias}" th:value="${categoria.getId()}" th:text="${categoria.getNombre()}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label" for="filtro_fecha_inicio">Filtrar por fecha inicial</label>
+                                        <input type="date" class="form-control" id="filtro_fecha_inicio" name="filtro_fecha_inicio">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label" for="filtro_fecha_final">Filtrar por fecha final</label>
+                                        <input type="date" class="form-control" id="filtro_fecha_final" name="filtro_fecha_final">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
+                            <hr/>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -73,9 +107,13 @@
                                                 <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/' + ${incidente.getId()}}" method="post">
                                                     <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</button>
                                                 </form>
-                                                <a class="dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</a>
+                                                <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/' + ${incidente.getId()}}" method="post">
+                                                    <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</button>
+                                                </form>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</a>
+                                                <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/' + ${incidente.getId()}}" method="post">
+                                                    <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
+                                                </form>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" th:href="'/casos/detalle/' + ${incidente.getId()}">Ver Detalle</a>
                                             </div>
@@ -139,6 +177,9 @@
             });
         }
         const consultarCambiarEstadoNoAplica = id => {
+            document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
             Swal.fire({
                 title: "Seguro que deseas cambiar a estado no aplica?",
                 showDenyButton: true,
@@ -148,14 +189,16 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire("Confirmado, procediendo", "", "success");
-                    let url = '/casos/no-aplica/' + id;
-                    window.location.href = url;
+                    document.getElementById('form_no_aplica_' + id).submit();
                 } else if (result.isDenied) {
                     Swal.fire("Cambios cancelados", "", "info");
                 }
             });
         }
         const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
             Swal.fire({
                 title: "Seguro que deseas eliminar el registro?",
                 showDenyButton: true,
@@ -165,8 +208,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire("Confirmado, procediendo", "", "success");
-                    let url = '/casos/eliminar/' + id;
-                    window.location.href = url;
+                    document.getElementById('form_eliminar_' + id).submit();
                 } else if (result.isDenied) {
                     Swal.fire("Cambios cancelados", "", "info");
                 }

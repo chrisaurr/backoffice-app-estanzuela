@@ -29,4 +29,6 @@ public interface InterfaceForIncidenteService {
     List<Incidente> getIncidentesByCiudadano(Ciudadano ciudadano, Integer estado);
 
     Incidente getIncidenteById(Long id, Integer estado);
+
+    List<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin);
 }
