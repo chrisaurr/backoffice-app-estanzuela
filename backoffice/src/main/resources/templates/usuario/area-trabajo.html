@@ -1,10 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>AREA DE TRABAJO</title>
 </head>
 <body>
-$END$
+
+
+<div layout:fragment="content">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>AREA DE TRABAJO</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Simple Tables</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="filtro_descripcion"
+                            name="filtro_descripcion"
+                            th:value="${filtroDescripcion}"
+                    >
+                  </div>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+              </form>
+              <hr/>
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">No DE CATEGORIA</th>
+                  <th scope="col">DESCRIPCION</th>
+                  <th scope="col">ESTADO</th>
+                  <th scope="col">ACCIONES</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="categoria: ${listadoCategoria}">
+                  <th scope="row" th:text="${categoria.getId()}"></th>
+                  <td th:text="${categoria.getDescripcion()}"></td>
+                  <td th:text="${categoria.getDireccion()}"></td>
+                  <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
+                  <td th:text="${incidente.getFecha()}"></td>
+                  <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
+                  <td th:if="${incidente.getEstado() == 1}"><span class="badge badge-danger">Sin proceso</span></td>
+                  <td th:if="${incidente.getEstado() == 2}"><span class="badge badge-success">Solucionado</span></td>
+                  <td th:if="${incidente.getEstado() == 3}"><span class="badge badge-dark">No aplica</span></td>
+                  <td>
+
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Cambiar estado
+                      </button>
+                      <div class="dropdown-menu">
+                        <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/' + ${incidente.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</button>
+                        </form>
+                        <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/' + ${incidente.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</button>
+                        </form>
+                        <div class="dropdown-divider"></div>
+                        <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/' + ${incidente.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
+                        </form>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" th:href="'/casos/detalle/' + ${incidente.getId()}">Ver Detalle</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+
+              <ul th:if="${listadoIncidentes.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
+                <li class="page-item">
+                  <a th:if="${url == 'all'}" class="page-link" th:href="@{'?page=0'}" >&laquo;</a>
+                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{${dataActual}+'&page=0'}" >&laquo;</a>
+                  <!--<a class="page-link" th:href="@{'/casos/'+${url}+'?page=0'}" >&laquo;</a>-->
+                </li>
+                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                  <a th:if="${url == 'all'}" class="page-link" th:href="@{'/casos/'+${url}+'?page='+(${pageNumber}-1)+''}"
+                     th:text="${pageNumber}"
+                  ></a>
+                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/'+${url}+${dataActual}+'&page='+(${pageNumber}-1)+''}"
+                     th:text="${pageNumber}"
+                  ></a>
+                </li>
+                <li class="page-item">
+                  <a th:if="${url == 'all'}" class="page-link" th:href="@{/casos/all(page=${listadoIncidentes.totalPages} - 1)}" >&raquo;</a>
+                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/buscar'+${dataActual}+'&page='+(${listadoIncidentes.totalPages} - 1)+''}" >&raquo;</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- Main content -->
+
+
+</div>
+
+
+<th:block layout:fragment="script">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">const Swal = require('sweetalert2');</script>
+  <script type="text/javascript">
+    let actualizarEstado = "[[${actualizado} != null ? ${actualizado} : '0']]"
+    if(actualizarEstado === '1'){
+      Swal.fire({
+        title: "Caso actualizado con exito",
+        icon: "success"
+      });
+    }
+    const consultarCambiarEstadoSolucionado = id => {
+      document.getElementById('form_solucionado_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas cambiar a solucionado?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Cambiar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_solucionado_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+    const consultarCambiarEstadoNoAplica = id => {
+      document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas cambiar a estado no aplica?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Cambiar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_no_aplica_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+    const consultarCambiarEstadoEliminado = id => {
+      document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas eliminar el registro?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Cambiar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_eliminar_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+  </script>
+</th:block>
 </body>
 </html>
