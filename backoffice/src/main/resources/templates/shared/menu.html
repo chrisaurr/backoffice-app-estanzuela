@@ -29,7 +29,7 @@
                      with font-awesome or any other icon font library -->
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">
+                    <a class="nav-link" aria-current="page" th:href="@{/}">
                         <i class="fa-solid fa-house"></i>
                         <p>Home</p>
                     </a>
@@ -46,6 +46,24 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/casos/all}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Listar</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a class="nav-link" href="#">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Categorias
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/categoria/all}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Listar</p>
                             </a>

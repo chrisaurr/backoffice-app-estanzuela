@@ -33,3 +33,26 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/webjars/AdminLTE/3.2.0/dist/js/demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">const Swal = require('sweetalert2');</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        const currentUrl = window.location.pathname;
+
+        $('.nav-link, .nav-item').removeClass('active menu-open');
+
+        $('.nav-sidebar a').each(function() {
+            const link = $(this).attr('href');
+
+            if (currentUrl === link) {
+                $(this).addClass('active');
+
+                const listItem = $(this).closest('li');
+                listItem.addClass('menu-open');
+
+                listItem.parents('.has-treeview').addClass('menu-open');
+            }
+        });
+    });
+</script>
