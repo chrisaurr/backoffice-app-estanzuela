@@ -54,7 +54,7 @@
                                     <td th:text="${rol.id}"></td>
                                     <td th:text="${rol.nombreRol}"></td>
                                     <td>
-                                        <!--<a th:href="'/categoria/editar/' + ${categoria.id}" class="btn btn-primary eBtn" th:onclick="editarCategoria(event)">Editar</a>-->
+                                        <a th:href="'/role/editar/' + ${rol.id}" class="btn btn-primary eBtn" th:onclick="editarRole(event)">Editar</a>
 
                                         <form th:id="@{'form_eliminar_' + ${rol.id}}" th:action="@{'/role/eliminar/' + ${rol.getId()}}" method="post">
                                             <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${rol.getId()} + ')'">Eliminar</button>
@@ -72,67 +72,9 @@
         </div>
     </section>
 
-    <!-- Modal para editar categoría -->
-    <div class="modal fade" id="modal-editar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Editar Categoría</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="form-editar-categoria" th:action="@{'/categoria/' + ${categoryId}}" method="post">
-                    <div class="modal-body">
-                        <input type="hidden" id="editar-id" name="id"> <!-- Campo oculto para almacenar el ID de la categoría -->
-                        <div class="form-group">
-                            <label for="editar-nombre">Nombre de la Categoría</label>
-                            <input type="text" class="form-control" id="editar-nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="editar-estado">Estado</label>
-                            <select class="form-control" id="editar-estado" name="estado" required>
-                                <option value="1">Sin proceso</option>
-                                <option value="2">Solucionado</option>
-                                <option value="3">No aplica</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                    </div>
-                </form>
+    <div th:replace="~{/role/include_role_listar/mdl-editar.html}"></div>
 
-
-            </div>
-        </div>
-    </div>
-    <!-- Modal para crear nueva categoría -->
-    <div class="modal fade" id="modal-crear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Crear Nuevo Rol</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="form-crear-categoria" th:action="@{/role/add}" method="post">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="crear-nombre">Nombre del Area de Trabajo</label>
-                            <input type="text" class="form-control" id="crear-nombre" name="nombreRol" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <div th:replace="~{/role/include_role_listar/mdl-crear.html}"></div>
 
 </div>
 
@@ -140,20 +82,19 @@
 <th:block layout:fragment="script">
 
     <script type="text/javascript">
-        function editarCategoria(event) {
+        function editarRole(event) {
             event.preventDefault();
             var href = $(event.target).attr('href');
-            var categoryId = href.split('/').pop();
 
-            $.get(href, function (categoria, status) {
-                if (categoria && categoria.id) {
+            $.get(href, function (role) {
+                if (role && role.id) {
                     var modal = $('#modal-editar');
-                    modal.find('#editar-id').data('categoria-id', categoryId);
-                    modal.find('#editar-nombre').val(categoria.nombre);
-                    modal.find('#editar-estado').val(categoria.estado);
-                    modal.showModal()
+                    modal.find('#editar-id').val(role.id);
+                    modal.find('#editar-nombre').val(role.nombreRol);
+                    modal.addClass('show');
+                    modal.modal('show');
                 } else {
-                    alert('Error al obtener los datos de la categoría.');
+                    alert('Error al obtener los datos del rol.');
                 }
             });
         }

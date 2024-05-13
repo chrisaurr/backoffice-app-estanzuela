@@ -1,0 +1,24 @@
+<div class="modal fade" id="modal-crear" tabindex="-1" role="dialog" aria-labelledby="modalCrearLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Crear Nueva Area De Trabajo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form-crear-area-de-trabajo" th:action="@{/area-trabajo/add}" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="crear-nombre">Nombre del Area de Trabajo</label>
+                        <input type="text" class="form-control" id="crear-nombre" name="nombre" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
