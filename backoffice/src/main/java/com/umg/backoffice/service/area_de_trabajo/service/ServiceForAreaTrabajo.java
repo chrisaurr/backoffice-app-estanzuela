@@ -2,6 +2,7 @@ package com.umg.backoffice.service.area_de_trabajo.service;
 
 import com.umg.backoffice.modelo.entity.AreaTrabajo;
 import com.umg.backoffice.modelo.entity.Constants;
+import com.umg.backoffice.modelo.entity.Role;
 import com.umg.backoffice.repository.AreaTrabajoRepository;
 import com.umg.backoffice.service.area_de_trabajo.interfaces.InterfaceForAreaDeTrabajo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,12 @@ public class ServiceForAreaTrabajo implements InterfaceForAreaDeTrabajo {
             return true;
         }
         return false;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public AreaTrabajo getAreaTrabajoById(Long id, Integer estado) {
+        return areaTrabajoRepository.findByIdAndEstadoNot(id, estado);
     }
 
 }

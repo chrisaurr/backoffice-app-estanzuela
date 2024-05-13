@@ -1,6 +1,7 @@
 package com.umg.backoffice.controller;
 
 import com.umg.backoffice.modelo.entity.AreaTrabajo;
+import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.service.area_de_trabajo.service.ServiceForAreaTrabajo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,11 @@ public class AreaTrabajoController {
     public String deleteAreaTrabajo(@PathVariable("id") Long id){
         serviceForAreaTrabajo.deleteAreaDeTrabajo(id);
         return "redirect:/area-trabajo/all";
+    }
+
+    @GetMapping("/editar/{id}")
+    @ResponseBody
+    public AreaTrabajo mostrarModalEditar(@PathVariable Long id) {
+        return serviceForAreaTrabajo.getAreaTrabajoById(id, Constants.ESTADO_ELIMINADO);
     }
 }

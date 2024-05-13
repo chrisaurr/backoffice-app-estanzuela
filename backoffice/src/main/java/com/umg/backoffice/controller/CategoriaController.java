@@ -21,22 +21,15 @@ public class CategoriaController {
     public ModelAndView getAllCategorias() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/categoria/listar");
-
         List<CategoriaIncidente> categorias = categoriaIncidenteService.getAllCategoriaIncidente(Constants.ESTADO_ELIMINADO);
         modelAndView.addObject("categorias", categorias);
-
-        CategoriaIncidente nuevaCategoria = new CategoriaIncidente();
-        modelAndView.addObject("categoriaIncidente", nuevaCategoria);
-
         return modelAndView;
     }
 
     @PostMapping("/add")
     public String addCategoria(@ModelAttribute CategoriaIncidente categoriaIncidente, Model model) {
         categoriaIncidente.setEstado(Constants.ESTADO_ACTIVO);
-
         categoriaIncidenteService.saveNewCategoriaIncidente(categoriaIncidente);
-
         return "redirect:/categoria/all";
     }
 
@@ -46,16 +39,6 @@ public class CategoriaController {
         return categoriaIncidenteService.getCategoriaIncidenteById(id, Constants.ESTADO_ELIMINADO);
     }
 
-    @PostMapping("/{id}")
-    public String actualizarCategoria(@PathVariable Long id, @ModelAttribute("categoriaIncidente") CategoriaIncidente categoriaIncidente) {
-        CategoriaIncidente categoriaExistente = categoriaIncidenteService.getCategoriaIncidenteById(id, Constants.ESTADO_ELIMINADO);
-        categoriaExistente.setNombre(categoriaIncidente.getNombre());
-        categoriaExistente.setEstado(1);
-
-        categoriaIncidenteService.saveNewCategoriaIncidente(categoriaExistente);
-        return "redirect:/categoria/all";
-    }
-
     @PostMapping("/eliminar/{id}")
     public ModelAndView eliminarCase(@PathVariable("id") Long id){
         ModelAndView mv = new ModelAndView();
@@ -63,4 +46,5 @@ public class CategoriaController {
         categoriaIncidenteService.deleteCategoriaIncidenteById(id);
         return mv;
     }
+
 }

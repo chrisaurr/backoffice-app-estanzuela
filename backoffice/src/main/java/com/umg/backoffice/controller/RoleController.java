@@ -1,5 +1,6 @@
 package com.umg.backoffice.controller;
 
+import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Role;
 import com.umg.backoffice.service.role.service.ServiceForRole;
@@ -37,5 +38,11 @@ public class RoleController {
     public String eliminarRole(@PathVariable("id") Long id){
         serviceForRole.delete(id);
         return "redirect:/role/all";
+    }
+
+    @GetMapping("/editar/{id}")
+    @ResponseBody
+    public Role mostrarModalEditar(@PathVariable Long id) {
+        return serviceForRole.getRoleById(id, Constants.ESTADO_ELIMINADO);
     }
 }

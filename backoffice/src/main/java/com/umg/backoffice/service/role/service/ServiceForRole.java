@@ -1,5 +1,6 @@
 package com.umg.backoffice.service.role.service;
 
+import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Role;
 import com.umg.backoffice.repository.RoleRepository;
@@ -43,4 +44,11 @@ public class ServiceForRole implements InterfaceForRole {
         }
         return false;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Role getRoleById(Long id, Integer estado) {
+        return roleRepository.findByIdAndEstadoNot(id, estado);
+    }
+
 }
