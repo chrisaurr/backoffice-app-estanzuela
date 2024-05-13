@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class CategoriaIncidenteService implements InterfaceForCategoriaIncidenteService {
@@ -41,6 +42,9 @@ public class CategoriaIncidenteService implements InterfaceForCategoriaIncidente
         CategoriaIncidente categoriaIncidente = categoriaIncidenteRepository.findById(id).orElse(null);
         if(categoriaIncidente == null)return true;
         categoriaIncidente.setEstado(0);
+        String randomString = UUID.randomUUID().toString();
+        randomString = randomString.substring(0,6);
+        categoriaIncidente.setNombre(categoriaIncidente.getNombre()+randomString);
         CategoriaIncidente confirmarCategoriaIncidente = categoriaIncidenteRepository.save(categoriaIncidente);
         return confirmarCategoriaIncidente != null;
     }

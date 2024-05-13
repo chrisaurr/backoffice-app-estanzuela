@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="53f60eb8-27cf-4cf6-97b4-146926aec68f" name="Changes" comment="" />
+    <list default="true" id="53f60eb8-27cf-4cf6-97b4-146926aec68f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backoffice/src/main/resources/templates/casos/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/backoffice/src/main/resources/templates/casos/listar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backoffice/src/main/resources/templates/categoria/listar.html" beforeDir="false" afterPath="$PROJECT_DIR$/backoffice/src/main/resources/templates/categoria/listarBackup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backoffice/src/main/resources/templates/shared/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/backoffice/src/main/resources/templates/shared/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backoffice/src/main/resources/templates/shared/menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/backoffice/src/main/resources/templates/shared/menu.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,25 +20,39 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2gDDUgHOYlj59oAJ8CPGdhncHUm" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JavaScript Debug.listar.html.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "desarrollo",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/julioaguilar/Cursos U/SistemasOperativos2/ProyectoEstanzuelaDefinitivo/BackOffice/Rama Cris/backoffice-app-estanzuela/backoffice",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backoffice/src/main/resources/templates/categoria" />
+      <recent name="$PROJECT_DIR$/backoffice/src/main/resources/templates" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -46,6 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1715223271741</updated>
       <workItem from="1715223273663" duration="68000" />
+      <workItem from="1715561512501" duration="5042000" />
     </task>
     <servers />
   </component>

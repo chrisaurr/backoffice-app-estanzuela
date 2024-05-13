@@ -70,13 +70,13 @@ public class Incidente {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_categoria", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("CategoriaIncidente")
     private CategoriaIncidente idCategoria;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_ciudadano", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("Ciudadano")
     private Ciudadano idCiudadano;
 
     @OneToMany(mappedBy = "idIncidente")

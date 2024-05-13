@@ -68,12 +68,13 @@ public class Usuario {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_rol", nullable = false)
+    @JsonBackReference("Role")
     private Role idRol;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_area_trabajo", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("AreaDeTrabajo")
     private AreaTrabajo idAreaTrabajo;
 
     @NotNull

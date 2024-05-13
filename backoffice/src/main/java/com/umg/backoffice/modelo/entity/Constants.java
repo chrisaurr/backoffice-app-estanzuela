@@ -6,4 +6,6 @@ public class Constants {
     public static Integer ESTADO_SIN_PROCESO = 1;
     public static Integer ESTADO_SOLUCIONADO = 2;
     public static Integer ESTADO_NO_APLICA = 3;
+
+    public static Integer ESTADO_ACTIVO = 1;
 }

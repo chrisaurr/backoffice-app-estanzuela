@@ -33,7 +33,7 @@ public class CategoriaController {
 
     @PostMapping("/add")
     public String addCategoria(@ModelAttribute CategoriaIncidente categoriaIncidente, Model model) {
-        categoriaIncidente.setEstado(Constants.ESTADO_SIN_PROCESO);
+        categoriaIncidente.setEstado(Constants.ESTADO_ACTIVO);
 
         categoriaIncidenteService.saveNewCategoriaIncidente(categoriaIncidente);
 

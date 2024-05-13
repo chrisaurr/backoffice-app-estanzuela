@@ -1,5 +1,6 @@
 package com.umg.backoffice.modelo.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,7 @@ public class Role {
     private Integer estado;
 
     @OneToMany(mappedBy = "idRol")
+    @JsonManagedReference("Role")
     private Set<Usuario> usuarios = new LinkedHashSet<>();
 
 }

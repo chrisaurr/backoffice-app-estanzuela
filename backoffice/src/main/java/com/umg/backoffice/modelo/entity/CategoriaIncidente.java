@@ -32,7 +32,7 @@ public class CategoriaIncidente {
     private Integer estado;
 
     @OneToMany(mappedBy = "idCategoria")
-    @JsonManagedReference
+    @JsonManagedReference("CategoriaIncidente")
     private Set<Incidente> incidentes = new LinkedHashSet<>();
 
 }

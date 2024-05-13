@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Categorias</title>
+    <title>Listado de Roles</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Listado de Categorias</h1>
+                    <h1>Listado de Roles</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -35,12 +35,12 @@
                     <div class="card">
                         <div class="card-header">
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-crear">
-                                Nueva Categoria
+                                Nuevo Rol
                             </button>
                         </div>
                         <!-- /.card-header -->
                         <div class="container">
-                            <h1>Listado de Categorias</h1>
+                            <h1>Listado de Roles</h1>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -50,14 +50,14 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="categoria : ${categorias}">
-                                    <td th:text="${categoria.id}"></td>
-                                    <td th:text="${categoria.nombre}"></td>
+                                <tr th:each="rol : ${roles}">
+                                    <td th:text="${rol.id}"></td>
+                                    <td th:text="${rol.nombreRol}"></td>
                                     <td>
                                         <!--<a th:href="'/categoria/editar/' + ${categoria.id}" class="btn btn-primary eBtn" th:onclick="editarCategoria(event)">Editar</a>-->
 
-                                        <form th:id="@{'form_eliminar_' + ${categoria.id}}" th:action="@{'/categoria/eliminar/' + ${categoria.getId()}}" method="post">
-                                            <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${categoria.getId()} + ')'">Eliminar</button>
+                                        <form th:id="@{'form_eliminar_' + ${rol.id}}" th:action="@{'/role/eliminar/' + ${rol.getId()}}" method="post">
+                                            <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${rol.getId()} + ')'">Eliminar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -113,16 +113,16 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Crear Nueva Categoría</h4>
+                    <h4 class="modal-title">Crear Nuevo Rol</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="form-crear-categoria" th:action="@{/categoria/add}" method="post">
+                <form id="form-crear-categoria" th:action="@{/role/add}" method="post">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="crear-nombre">Nombre de la Categoría</label>
-                            <input type="text" class="form-control" id="crear-nombre" name="nombre" required>
+                            <label for="crear-nombre">Nombre del Area de Trabajo</label>
+                            <input type="text" class="form-control" id="crear-nombre" name="nombreRol" required>
                         </div>
                     </div>
                     <div class="modal-footer">

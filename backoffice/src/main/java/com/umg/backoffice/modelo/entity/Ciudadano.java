@@ -73,7 +73,7 @@ public class Ciudadano {
     private String role;
 
     @OneToMany(mappedBy = "idCiudadano")
-    @JsonManagedReference
+    @JsonManagedReference("Ciudadano")
     private Set<Incidente> incidentes = new LinkedHashSet<>();
 
 }
