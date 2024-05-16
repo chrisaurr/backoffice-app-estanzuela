@@ -22,6 +22,12 @@ import java.util.Set;
         @Index(name = "fk_usuarios_entidad1_idx", columnList = "id_entidad")
 })
 public class Usuario {
+
+    @Transient
+    private final int ACTIVO = 1;
+    @Transient
+    private final int ELIMINADO = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario", nullable = false)
@@ -80,9 +86,19 @@ public class Usuario {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_entidad", nullable = false)
+    @JsonBackReference("Entidad")
     private Entidad idEntidad;
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<AsignacionIncidente> asignacionIncidentes = new LinkedHashSet<>();
+
+    @PrePersist
+    private void prePersist() {
+        this.estado = ACTIVO;
+        this.fecha = Instant.now();
+        Entidad entidad = new Entidad();
+        entidad.setId(1L);
+        this.idEntidad = entidad;
+    }
 
 }

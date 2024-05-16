@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>AREA DE TRABAJO</title>
+  <title>USUARIOS</title>
 </head>
 <body>
 
@@ -16,7 +16,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>AREA DE TRABAJO</h1>
+          <h1>USUARIOS</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -38,57 +38,55 @@
               <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
                 <div class="form-row">
                   <div class="form-group col-md-3">
-                    <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
+                    <label class="col-form-label" for="filtro_nombre">Filtrar por Nombre</label>
                     <input
                             type="text"
                             class="form-control"
-                            id="filtro_descripcion"
-                            name="filtro_descripcion"
-                            th:value="${filtroDescripcion}"
+                            id="filtro_nombre"
+                            name="filtro_nombre"
+                            th:value="${filtroNombre}"
                     >
                   </div>
-                <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
               </form>
+              <div>
+                <a th:href="'/usuario/nuevo'" type="button" class = "btn-primary">Agregar nuevo</a>
+              </div>
               <hr/>
               <table class="table table-bordered">
                 <thead>
                 <tr>
-                  <th scope="col">No DE CATEGORIA</th>
-                  <th scope="col">DESCRIPCION</th>
-                  <th scope="col">ESTADO</th>
+                  <th scope="col">#</th>
+                  <th scope="col">NOMBRE</th>
+                  <th scope="col">APELLIDO</th>
+                  <th scope="col">DIRECCION</th>
+                  <th scope="col">TELEFONO</th>
                   <th scope="col">ACCIONES</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="categoria: ${listadoCategoria}">
-                  <th scope="row" th:text="${categoria.getId()}"></th>
-                  <td th:text="${categoria.getDescripcion()}"></td>
-                  <td th:text="${categoria.getDireccion()}"></td>
-                  <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
-                  <td th:text="${incidente.getFecha()}"></td>
-                  <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
-                  <td th:if="${incidente.getEstado() == 1}"><span class="badge badge-danger">Sin proceso</span></td>
-                  <td th:if="${incidente.getEstado() == 2}"><span class="badge badge-success">Solucionado</span></td>
-                  <td th:if="${incidente.getEstado() == 3}"><span class="badge badge-dark">No aplica</span></td>
+                <tr th:each="usuario: ${usuarios}">
+                  <th scope="row" th:text="${usuario.getId()}"></th>
+                  <td th:text="${usuario.getNombre()}"></td>
+                  <td th:text="${usuario.getApellidos()}"></td>
+                  <td th:text="${usuario.getDireccion()}"></td>
+                  <td th:text="${usuario.getTelefono()}"></td>
                   <td>
 
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Cambiar estado
+                        Acciones
                       </button>
                       <div class="dropdown-menu">
-                        <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/' + ${incidente.getId()}}" method="post">
-                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</button>
+                        <form th:id="'form_eliminar_' + ${usuario.getId()}" th:action="@{'/usuario/eliminar/' + ${usuario.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${usuario.getId()} + ')'">Eliminar</button>
                         </form>
-                        <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/' + ${incidente.getId()}}" method="post">
-                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</button>
+                        <form th:id="'form_editar_' + ${usuario.getId()}" th:action="@{'/usuario/editar/' + ${usuario.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarEditar(' + ${usuario.getId()} + ')'">Editar</button>
                         </form>
-                        <div class="dropdown-divider"></div>
-                        <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/' + ${incidente.getId()}}" method="post">
-                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
-                        </form>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="'/casos/detalle/' + ${incidente.getId()}">Ver Detalle</a>
                       </div>
                     </div>
                   </td>
@@ -97,28 +95,6 @@
               </table>
             </div>
             <!-- /.card-body -->
-            <div class="card-footer clearfix">
-
-              <ul th:if="${listadoIncidentes.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
-                <li class="page-item">
-                  <a th:if="${url == 'all'}" class="page-link" th:href="@{'?page=0'}" >&laquo;</a>
-                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{${dataActual}+'&page=0'}" >&laquo;</a>
-                  <!--<a class="page-link" th:href="@{'/casos/'+${url}+'?page=0'}" >&laquo;</a>-->
-                </li>
-                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
-                  <a th:if="${url == 'all'}" class="page-link" th:href="@{'/casos/'+${url}+'?page='+(${pageNumber}-1)+''}"
-                     th:text="${pageNumber}"
-                  ></a>
-                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/'+${url}+${dataActual}+'&page='+(${pageNumber}-1)+''}"
-                     th:text="${pageNumber}"
-                  ></a>
-                </li>
-                <li class="page-item">
-                  <a th:if="${url == 'all'}" class="page-link" th:href="@{/casos/all(page=${listadoIncidentes.totalPages} - 1)}" >&raquo;</a>
-                  <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/buscar'+${dataActual}+'&page='+(${listadoIncidentes.totalPages} - 1)+''}" >&raquo;</a>
-                </li>
-              </ul>
-            </div>
           </div>
           <!-- /.card -->
         </div>
@@ -143,20 +119,20 @@
         icon: "success"
       });
     }
-    const consultarCambiarEstadoSolucionado = id => {
-      document.getElementById('form_solucionado_' + id).addEventListener('submit', function (e){
+    const consultarEditar = id => {
+      document.getElementById('form_editar_' + id).addEventListener('submit', function (e){
         e.preventDefault();
       });
       Swal.fire({
-        title: "Seguro que deseas cambiar a solucionado?",
+        title: "Seguro que deseas editar el usuario?",
         showDenyButton: true,
-        confirmButtonText: "Si, Cambiar",
+        confirmButtonText: "Si, Editar",
         denyButtonText: `No, Cancelar`,
         icon: "question"
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire("Confirmado, procediendo", "", "success");
-          document.getElementById('form_solucionado_' + id).submit();
+          document.getElementById('form_editar_' + id).submit();
         } else if (result.isDenied) {
           Swal.fire("Cambios cancelados", "", "info");
         }
@@ -188,7 +164,7 @@
       Swal.fire({
         title: "Seguro que deseas eliminar el registro?",
         showDenyButton: true,
-        confirmButtonText: "Si, Cambiar",
+        confirmButtonText: "Si, Eliminar",
         denyButtonText: `No, Cancelar`,
         icon: "question"
       }).then((result) => {
