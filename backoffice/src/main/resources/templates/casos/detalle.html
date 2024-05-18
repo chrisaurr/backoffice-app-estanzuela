@@ -38,7 +38,6 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <label for="numeroCaso" class="col-form-label">Numero de caso</label>
-                                    <!--<label class="form-control" th:text="${incidente.getId()}"></label>-->
                                     <input readonly type="text" id="numeroCaso" class="form-control" th:value="${incidente.getId()}">
                                 </div>
                                 <div class="col-md-10">
@@ -69,14 +68,53 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="categoria" class="col-form-label">Categoria</label>
-                                    <input readonly type="text" id="categoria" class="form-control" th:value="${incidente.getIdCategoria.getNombre()}">
+                                    <input readonly type="text" id="categoria" class="form-control" th:value="${incidente.getIdCategoria().getNombre()}">
                                 </div>
                                 <div class="col-md-8">
                                     <label for="ciudadano" class="col-form-label">Ciudadano</label>
-                                    <input readonly type="text" id="ciudadano" class="form-control" th:value="${incidente.getIdCiudadano.getNombres()}">
+                                    <input readonly type="text" id="ciudadano" class="form-control" th:value="${incidente.getIdCiudadano().getNombres()}">
                                 </div>
                             </div>
                             <hr/>
+
+                            <!-- Listado de Notificaciones -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Notificaciones</h4>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-crear-notificacion">
+                                        Nueva Notificación
+                                    </button>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Descripción</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="notificacion : ${notificaciones}">
+                                            <td th:text="${notificacion.id}"></td>
+                                            <td th:text="${notificacion.descripcion}"></td>
+                                            <td>
+                                                <button class="btn btn-primary" th:attr="data-id=${notificacion.id}" onclick="editarNotificacion(event)">Editar</button>
+
+                                                <form th:id="@{'form_eliminar_' + ${notificacion.id}}" th:action="@{'/notificacion/eliminar/' + ${notificacion.getId()}}" method="post">
+                                                    <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${notificacion.getId()} + ')'">Eliminar</button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div th:replace="~{/casos/include_casos_detalle/mdl-crear.html}"></div>
+
+                            <div th:replace="~{/casos/include_casos_detalle/mdl-editar.html}"></div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4>Ubicacion geografica de la denuncia</h4>
@@ -136,6 +174,39 @@
             });
         }
         initMap();
+
+        function editarNotificacion(event) {
+            event.preventDefault();
+            const id = event.currentTarget.getAttribute('data-id');
+            fetch('/notificacion/editar/' + id)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('editar-id-notificacion').value = data.id;
+                    document.getElementById('editar-descripcion-notificacion').value = data.descripcion;
+                    $('#modal-editar-notificacion').modal('show');
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas eliminar el registro?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
     </script>
 </th:block>
 </body>

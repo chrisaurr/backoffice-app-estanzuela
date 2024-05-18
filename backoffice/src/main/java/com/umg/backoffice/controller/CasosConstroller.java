@@ -3,6 +3,8 @@ package com.umg.backoffice.controller;
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Incidente;
+import com.umg.backoffice.modelo.entity.Notificacion;
+import com.umg.backoffice.service.Notificacion.service.NotificacionService;
 import com.umg.backoffice.service.categoria_incidente.service.CategoriaIncidenteService;
 import com.umg.backoffice.service.incidente.service.IncidenteService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +42,9 @@ public class CasosConstroller {
     @Autowired
     private CategoriaIncidenteService categoriaIncidenteService;
 
+    @Autowired
+    private NotificacionService notificacionService;
+
     private Integer resultado = 0;
 
     @GetMapping("/all")
@@ -65,14 +70,17 @@ public class CasosConstroller {
     }
 
     @GetMapping("/detalle/{id}")
-    public ModelAndView detalleCase(@PathVariable("id") Long id){
+    public ModelAndView detalleCase(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/casos/detalle");
         Incidente incidente = incidenteService.getIncidenteById(id, Constants.ESTADO_ELIMINADO);
         mv.addObject("incidente", incidente);
 
-        if(incidente.getDocumentoA() != null){
-            try{
+        List<Notificacion> notificaciones = notificacionService.getNotificacionesByIncidente(id, Constants.ESTADO_ACTIVO);
+        mv.addObject("notificaciones", notificaciones);
+
+        if (incidente.getDocumentoA() != null) {
+            try {
                 String uploadDir = incidente.getDocumentoA();
                 Path directorio = Paths.get(uploadDir);
                 String extension = getFileExtension(directorio);
@@ -80,12 +88,12 @@ public class CasosConstroller {
                 String documentoA = Base64.getEncoder().encodeToString(resource);
                 documentoA = "data:image/" + extension + ";base64," + documentoA;
                 mv.addObject("documentoA", documentoA);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
 
-        if(incidente.getDocumentoB() != null){
+        if (incidente.getDocumentoB() != null) {
             try {
                 String uploadDir = incidente.getDocumentoB();
                 Path directorio = Paths.get(uploadDir);
@@ -94,10 +102,11 @@ public class CasosConstroller {
                 String documentoB = Base64.getEncoder().encodeToString(resourceB);
                 documentoB = "data:image/" + extension + ";base64," + documentoB;
                 mv.addObject("documentoB", documentoB);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
+
         return mv;
     }
 
