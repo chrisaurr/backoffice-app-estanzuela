@@ -7,10 +7,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +24,7 @@ import java.util.Set;
         @Index(name = "usuarios_departamento_FK", columnList = "id_area_trabajo"),
         @Index(name = "fk_usuarios_entidad1_idx", columnList = "id_entidad")
 })
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Transient
     private final int ACTIVO = 1;
@@ -101,4 +104,31 @@ public class Usuario {
         this.idEntidad = entidad;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        GrantedAuthority authority = new SimpleGrantedAuthority("ADMIN");
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(authority);
+        return grantedAuthorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

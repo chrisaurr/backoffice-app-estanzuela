@@ -3,6 +3,7 @@ package com.umg.backoffice.service.usuario.interfaces;
 import com.umg.backoffice.modelo.entity.Usuario;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface InterfaceForUsuario {
@@ -14,4 +15,6 @@ public interface InterfaceForUsuario {
 
     Usuario save(Usuario usuario);
     Boolean deleteById(Long id);
+
+    Optional<Usuario> findByUserName(String username, Integer estado);
 }

@@ -149,7 +149,9 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <a class="btn btn-default btn-flat" href="#">Profile</a>
-                    <a class="btn btn-default btn-flat float-right" href="/logout">Sign out</a>
+                    <form th:action="@{/logout}" method="post" id="logout">
+                        <a class="btn btn-default btn-flat float-right" onclick="document.getElementById('logout').submit()">Sign out</a>
+                    </form>
                 </li>
             </ul>
         </li>

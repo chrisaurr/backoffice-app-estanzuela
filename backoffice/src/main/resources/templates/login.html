@@ -30,15 +30,15 @@
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg" th:if="${param.error}">
-                User/password is invalid.
+                Usuario y password invalidos
             </p>
             <p class="login-box-msg" th:if="${param.logout}">
-                You have been logged out.
+                Sesion terminada
             </p>
 
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Inicio de sesion</p>
 
-            <form method="post" th:action="@{~/login}">
+            <form method="post" th:action="@{'/loguearse'}">
                 <div class="input-group mb-3">
                     <input class="form-control" name="username" placeholder="username" type="text">
                     <div class="input-group-append">
@@ -56,38 +56,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-8">
-                        <div class="icheck-primary">
-                            <input id="remember" type="checkbox">
-                            <label for="remember">
-                                Remember Me
-                            </label>
-                        </div>
-                    </div>
                     <!-- /.col -->
                     <div class="col-4">
-                        <button class="btn btn-primary btn-block" type="submit">Sign In</button>
+                        <button class="btn btn-primary btn-block" type="submit">Iniciar sesion</button>
                     </div>
                     <!-- /.col -->
                 </div>
             </form>
 
-            <div class="social-auth-links text-center mb-3">
-                <p>- OR -</p>
-                <a class="btn btn-block btn-primary" href="#">
-                    <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                </a>
-                <a class="btn btn-block btn-danger" href="#">
-                    <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                </a>
-            </div>
-            <!-- /.social-auth-links -->
-
-            <p class="mb-1">
-                <a href="forgot-password.html">I forgot my password</a>
-            </p>
             <p class="mb-0">
-                <a class="text-center" href="/register">Register a new membership</a>
+                <a class="text-center" href="/register">Registrar nuevo usuario</a>
             </p>
         </div>
         <!-- /.login-card-body -->

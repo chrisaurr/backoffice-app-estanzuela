@@ -1,97 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Admin LTE 3 | Registration Page</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
-        rel="stylesheet">
-  <!-- Font Awesome -->
-  <link href="/webjars/AdminLTE/3.2.0/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <!-- icheck bootstrap -->
-  <link href="/webjars/AdminLTE/3.2.0/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet">
-  <!-- Theme style -->
-  <link href="/webjars/AdminLTE/3.2.0/dist/css/adminlte.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Crear usuario</title>
 </head>
-<body class="hold-transition register-page">
-<div class="register-box">
-  <div class="register-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE3</a>
-  </div>
+<body>
+<div layout:fragment="content">
 
-  <div class="card">
-    <div class="card-body register-card-body">
-      <p class="login-box-msg">Register a new membership</p>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Agregar un nuevo usuario</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Simple Tables</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
 
-      <form action="../../index.html" method="post">
-        <div class="input-group mb-3">
-          <input class="form-control" placeholder="Full name" type="text">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input class="form-control" placeholder="Email" type="email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input class="form-control" placeholder="Handphone" type="Handphone">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input id="agreeTerms" name="terms" type="checkbox" value="agree">
-              <label for="agreeTerms">
-                I agree to the <a href="#">terms</a>
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button class="btn btn-primary btn-block" type="submit">Register</button>
-            <button class="btn btn-primary btn-block" type="reset">Cancel</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="container">
+                            <form id="crear_nuevo" th:action="${'/signup'}" method="post">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputNombre">Nombres</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputNombre"
+                                                name="nombre"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputApellidos">Apellidos</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputApellidos"
+                                                name="apellidos"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputDireccion">Direccion</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputDireccion"
+                                                name="direccion"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputTelefono">Telefono</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputTelefono"
+                                                name="telefono"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail">Email</label>
+                                        <input
+                                                type="email"
+                                                class="form-control"
+                                                id="inputEmail"
+                                                name="email"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputUserName">Usuario</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputUserName"
+                                                name="username"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="areaTrabajo">Seleccione area de trabajo</label>
+                                        <select class="form-control" name="areaTrabajo" id="areaTrabajo">
+                                            <option
+                                                th:each="areaTrabajo: ${listadoAreaTrabajo}"
+                                                th:value="${areaTrabajo.getId()}"
+                                                th:text="${areaTrabajo.getNombre()}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="role">Seleccione Rol</label>
+                                        <select class="form-control" name="idRol" id="role">
+                                            <option
+                                                th:each="rol: ${listadoRoles}"
+                                                th:value="${rol.getId()}"
+                                                th:text="${rol.getNombreRol()}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword">Password</label>
+                                        <input type="password" class="form-control" id="inputPassword" name="password" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputConfirmPass">Confirme Password</label>
+                                        <input type="password" class="form-control" id="inputConfirmPass" required>
+                                    </div>
+                                </div>
+                                <button type="submit" th:onclick="validarPassword()" class="btn btn-primary">Guardar</button>
+                            </form>
 
-      <div class="social-auth-links text-center">
-        <p>- OR -</p>
-        <a class="btn btn-block btn-primary" href="#">
-          <i class="fab fa-facebook mr-2"></i>
-          Sign up using Facebook
-        </a>
-        <a class="btn btn-block btn-danger" href="#">
-          <i class="fab fa-google-plus mr-2"></i>
-          Sign up using Google+
-        </a>
-      </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <a class="text-center" href="login.html">I already have a membership</a>
-    </div>
-    <!-- /.form-box -->
-  </div><!-- /.card -->
 </div>
-<!-- /.register-box -->
 
-<!-- jQuery -->
-<script src="/webjars/AdminLTE/3.2.0/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="/webjars/AdminLTE/3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/webjars/AdminLTE/3.2.0/dist/js/adminlte.min.js"></script>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        const validarPassword = () => {
+            document.getElementById('crear_nuevo').addEventListener('submit', function (e){
+                e.preventDefault();
+                let password = document.getElementById('inputPassword').value;
+                let retypePassword = document.getElementById('inputConfirmPass').value;
+                if(password !== retypePassword){
+                    Swal.fire({
+                        title: "La contraseña no coincide, revise",
+                        icon: "error"
+                    });
+                }else{
+                    document.getElementById('crear_nuevo').submit();
+                }
+            });
+        }
+    </script>
+</th:block>
+
 </body>
 </html>
