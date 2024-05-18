@@ -29,7 +29,7 @@
   "keyToString": {
     "JavaScript Debug.listar.html.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "2024.05.13-funcionalidad-editar-en-todos-los-modulos",
+    "git-widget-placeholder": "desarrollo",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/julioaguilar/Cursos U/SistemasOperativos2/ProyectoEstanzuelaDefinitivo/BackOffice/Rama Cris/backoffice-app-estanzuela/backoffice",
     "node.js.detected.package.eslint": "true",
@@ -65,6 +65,7 @@
       <workItem from="1715223273663" duration="68000" />
       <workItem from="1715561512501" duration="5042000" />
       <workItem from="1715645831848" duration="139000" />
+      <workItem from="1715992659501" duration="279000" />
     </task>
     <servers />
   </component>

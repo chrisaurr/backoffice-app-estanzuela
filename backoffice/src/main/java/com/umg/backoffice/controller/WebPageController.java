@@ -91,12 +91,4 @@ public class WebPageController {
         return "about";
     }
 
-    @PostMapping("/loguearse")
-    public String loguearse(
-            @RequestParam("username")String username,
-            @RequestParam("password")String password
-            ) {
-        boolean estadoLogueo = serviceForUsuario.logIn(username, password);
-        return "index";
-    }
 }

@@ -6,9 +6,6 @@ import com.umg.backoffice.repository.UsuarioRepository;
 import com.umg.backoffice.service.usuario.interfaces.InterfaceForUsuario;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +17,13 @@ import java.util.Set;
 public class ServiceForUsuario implements InterfaceForUsuario {
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     HttpServletRequest httpServletRequest;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly=true)
     @Override
@@ -58,7 +52,8 @@ public class ServiceForUsuario implements InterfaceForUsuario {
     @Transactional
     @Override
     public Usuario save(Usuario usuario) {
-        usuario.setPassword(encryptPassword(usuario.getPassword()));
+        String password = passwordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(password);
         return usuarioRepository.save(usuario);
     }
 
@@ -79,22 +74,4 @@ public class ServiceForUsuario implements InterfaceForUsuario {
         return usuarioRepository.findByUsernameAndEstadoNot(username, estado);
     }
 
-    public String encryptPassword(String password) {
-        return passwordEncoder.encode(password);
-    }
-
-    public boolean logIn(String username, String password) {
-        try {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    username,
-                    password
-            );
-
-            authenticationManager.authenticate(authentication);
-            return true;
-        }catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }
