@@ -1,12 +1,10 @@
 package com.umg.backoffice.controller;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
-import com.umg.backoffice.modelo.entity.Constants;
-import com.umg.backoffice.modelo.entity.Incidente;
-import com.umg.backoffice.modelo.entity.Notificacion;
+import com.umg.backoffice.modelo.entity.*;
 import com.umg.backoffice.service.Notificacion.service.NotificacionService;
 import com.umg.backoffice.service.categoria_incidente.service.CategoriaIncidenteService;
 import com.umg.backoffice.service.incidente.service.IncidenteService;
+import com.umg.backoffice.service.usuario.service.ServiceForUsuario;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -29,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -44,6 +43,9 @@ public class CasosConstroller {
 
     @Autowired
     private NotificacionService notificacionService;
+
+    @Autowired
+    private ServiceForUsuario serviceForUsuario;
 
     private Integer resultado = 0;
 
@@ -78,6 +80,9 @@ public class CasosConstroller {
 
         List<Notificacion> notificaciones = notificacionService.getNotificacionesByIncidente(id, Constants.ESTADO_ACTIVO);
         mv.addObject("notificaciones", notificaciones);
+
+        Set<Usuario> usuarios = serviceForUsuario.findAll();
+        mv.addObject("usuarios", usuarios);
 
         if (incidente.getDocumentoA() != null) {
             try {
@@ -223,5 +228,12 @@ public class CasosConstroller {
         mv.addObject("dataActual", dataActual);
         resultado = 0;
         return mv;
+    }
+
+    @PostMapping("/asignar/{id}")
+    public String asignarCaso(@PathVariable("id") Long id,
+                              @RequestParam("id_usuario")Long idUsuario
+    ){
+
     }
 }

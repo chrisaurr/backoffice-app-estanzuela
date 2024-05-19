@@ -18,4 +18,7 @@ public class Constants {
 
     public static Integer ESTADO_ACTIVO = 1;
 
+    public static Integer ASIGNACION_TERMINADA = 0;
+    public static Integer ASIGNACION_ACTIVA = 1;
+
 }

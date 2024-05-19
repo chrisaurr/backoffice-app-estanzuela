@@ -1,6 +1,7 @@
 package com.umg.backoffice.modelo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -80,6 +81,7 @@ public class Incidente {
     private Ciudadano idCiudadano;
 
     @OneToMany(mappedBy = "idIncidente")
+    @JsonManagedReference("AsignacionIncidente")
     private Set<AsignacionIncidente> asignacionIncidentes = new LinkedHashSet<>();
 
 }

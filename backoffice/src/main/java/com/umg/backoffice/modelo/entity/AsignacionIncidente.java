@@ -1,5 +1,6 @@
 package com.umg.backoffice.modelo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -38,11 +39,13 @@ public class AsignacionIncidente {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_incidente", nullable = false)
+    @JsonBackReference("AsignacionIncidente")
     private Incidente idIncidente;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonBackReference("AsignacionUsuario")
     private Usuario idUsuario;
 
 }
