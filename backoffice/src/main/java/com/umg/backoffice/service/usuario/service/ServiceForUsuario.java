@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ServiceForUsuario implements InterfaceForUsuario {
@@ -52,6 +53,12 @@ public class ServiceForUsuario implements InterfaceForUsuario {
     @Transactional
     @Override
     public Usuario save(Usuario usuario) {
+        Usuario findUserIfExist = usuarioRepository.findByUsernameAndEstadoNot(usuario.getUsername(), Constants.ESTADO_ELIMINADO).orElse(null);
+        //validando que el username sea unico
+        if (findUserIfExist != null) {
+            return null;
+        }
+
         String password = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(password);
         return usuarioRepository.save(usuario);
@@ -63,6 +70,11 @@ public class ServiceForUsuario implements InterfaceForUsuario {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         if (usuario == null)return false;
 
+        UUID uuid = UUID.randomUUID();
+        String stringLimpio = uuid.toString().replaceAll("-", "");
+        String random = stringLimpio.substring(0, 7);
+
+        usuario.setUsername(usuario.getUsername()+stringLimpio);
         usuario.setEstado(Constants.ESTADO_ELIMINADO);
         Usuario deleteUser = usuarioRepository.save(usuario);
 

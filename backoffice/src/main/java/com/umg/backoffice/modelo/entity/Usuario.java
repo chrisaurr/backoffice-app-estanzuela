@@ -24,7 +24,7 @@ import java.util.*;
         @Index(name = "usuarios_departamento_FK", columnList = "id_area_trabajo"),
         @Index(name = "fk_usuarios_entidad1_idx", columnList = "id_entidad")
 })
-public class Usuario implements UserDetails {
+public class Usuario{
 
     @Transient
     private final int ACTIVO = 1;
@@ -102,33 +102,5 @@ public class Usuario implements UserDetails {
         Entidad entidad = new Entidad();
         entidad.setId(1L);
         this.idEntidad = entidad;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority authority = new SimpleGrantedAuthority("ADMIN");
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(authority);
-        return grantedAuthorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

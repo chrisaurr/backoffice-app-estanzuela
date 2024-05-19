@@ -77,8 +77,10 @@ public class UsuarioController {
         usuario.setPassword(password);
         usuario.setIdAreaTrabajo(areaTrabajo);
         usuario.setIdRol(role);
-        serviceForUsuario.save(usuario);
-        return "redirect:/usuario/all";
+        Usuario user = serviceForUsuario.save(usuario);
+
+        if(user != null){return "redirect:/usuario/all";}
+        else{return "redirect:/usuario/all?usuarioexiste";}
     }
 
     @PostMapping("/editar/{id}")

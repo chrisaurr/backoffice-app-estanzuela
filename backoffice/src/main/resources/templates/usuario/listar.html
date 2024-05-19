@@ -55,6 +55,7 @@
               <div>
                 <a th:href="'/usuario/nuevo'" type="button" class = "btn-primary">Agregar nuevo</a>
               </div>
+              <div th:if="${param.usuarioexiste}">No se puede guardar el usuario con username existente en la base de datos</div>
               <hr/>
               <table class="table table-bordered">
                 <thead>
