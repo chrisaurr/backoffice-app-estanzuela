@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html layout:decorate="~{shared/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -13,6 +14,10 @@
     <h2>Home Page</h2>
     <p>Home Contents</p>
     <p>Home Contents</p>
+    <div sec:authorize="isAuthenticated()">
+        <p><span>Usuario:<span sec:authentication="name"></span></span></p>
+        <p><span>ROL:<span sec:authentication="principal.getAuthorities()"></span></span></p>
+    </div>
 </div>
 
 <th:block layout:fragment="script">

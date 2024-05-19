@@ -75,7 +75,7 @@ public class Usuario implements UserDetails {
     private Integer estado;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_rol", nullable = false)
     @JsonBackReference("Role")
     private Role idRol;

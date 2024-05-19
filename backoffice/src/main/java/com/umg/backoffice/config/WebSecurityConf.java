@@ -39,16 +39,14 @@ public class WebSecurityConf {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/loguearse")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                .logout((logout) -> logout.logoutSuccessUrl("/login?logout").permitAll());
+                .logout((logout) -> logout.logoutSuccessUrl("/login?logout=true")
+                        .permitAll());
 
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
