@@ -116,6 +116,67 @@
                             <div th:replace="~{/casos/include_casos_detalle/mdl-editar.html}"></div>
 
                             <div class="row">
+
+                                <div class="col-md-12" style="border: 1px solid black;">
+                                    <form id="formulario_asignar_incidente" method="post" th:action="@{'/casos/asignar/' + ${incidente.getId()}}">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-1">
+                                                <label style="margin-top: 15px" for="select_asignar" class="col-form-label">Asignar a</label>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <select style="margin-top: 15px" id="select_asignar" class="form-control" name="id_usuario">
+                                                    <option
+                                                            th:each="usuario: ${usuarios}"
+                                                            th:value="${usuario.getId()}"
+                                                            th:text="${usuario.getNombre() + ' ' + usuario.getApellidos()}"
+                                                    ></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <input class="form-control" placeholder="Ingresa comentario adicional..." name="comentario" required style="margin-top: 15px;">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <button style="margin-top: 15px" type="submit" class="btn btn-primary">Asignar</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <!-- Listado de asignaciones -->
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Asignaciones</h4>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>USUARIO</th>
+                                            <th>COMENTARIO</th>
+                                            <th>ESTADO</th>
+                                            <th>ACCIONES</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="asignacion : ${listadoAsignaciones}">
+                                            <td th:text="${asignacion.getIdUsuario().getNombre()}"></td>
+                                            <td th:text="${asignacion.getComentario()}"></td>
+                                            <td th:if="${asignacion.getEstado() == 1}">SIN PROCESO</td>
+                                            <td th:if="${asignacion.getEstado() == 0}">TERMINADO</td>
+                                            <td>
+                                                <form th:id="@{'form_completado_' + ${asignacion.getId()}}" th:action="@{'/casos/marcar-completado/' + ${asignacion.getId()}}" method="post">
+                                                    <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoCompletado(' + ${asignacion.getId()} + ')'">Marcar completado</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <hr/>
+
+                            <div class="row">
                                 <div class="col-md-4">
                                     <h4 style="align-items: center">Ubicacion geografica de la denuncia</h4>
                                 </div>
@@ -136,28 +197,6 @@
                                             <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
                                         </form>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6" style="border: 1px solid black;">
-                                    <form id="formulario_asignar_incidente" method="post" th:action="@{'/casos/asignar/' + ${incidente.getId()}}">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-2">
-                                                <label style="margin-top: 15px" for="select_asignar" class="col-form-label">Asignar caso</label>
-                                            </div>
-                                            <div class="form-group col-md-7">
-                                                <select style="margin-top: 15px" id="select_asignar" class="form-control" name="id_usuario">
-                                                    <option
-                                                            th:each="usuario: ${usuarios}"
-                                                            th:value="${usuario.getId()}"
-                                                            th:text="${usuario.getNombre() + ' ' + usuario.getApellidos()}"
-                                                    ></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <button style="margin-top: 15px" type="submit" class="btn btn-primary">Asignar</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
 
                             </div>
@@ -220,6 +259,26 @@
                 .catch(error => console.error('Error:', error));
         }
 
+        const consultarCambiarEstadoCompletado = id => {
+            document.getElementById('form_completado_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas marcar como completada la tarea?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_completado_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+
         const consultarCambiarEstadoEliminado = id => {
             document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
                 e.preventDefault();
@@ -239,6 +298,7 @@
                 }
             });
         }
+
     </script>
 </th:block>
 </body>

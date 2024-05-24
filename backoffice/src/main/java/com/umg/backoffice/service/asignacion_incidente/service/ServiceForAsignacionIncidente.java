@@ -1,6 +1,7 @@
 package com.umg.backoffice.service.asignacion_incidente.service;
 
 import com.umg.backoffice.modelo.entity.AsignacionIncidente;
+import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.modelo.entity.Usuario;
 import com.umg.backoffice.repository.AsignacionIncidenteRepository;
 import com.umg.backoffice.service.asignacion_incidente.interfaces.InterfaceForAsignacionIncidente;
@@ -45,5 +46,14 @@ public class ServiceForAsignacionIncidente implements InterfaceForAsignacionInci
             return asignacionIncidenteRepository.save(asignacionIncidente);
         }
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<AsignacionIncidente> findAllAsignacionIncidentesByIdIncidente(Long idIncidente) {
+        Incidente incidete = new Incidente();
+        incidete.setId(idIncidente);
+
+        return asignacionIncidenteRepository.findByIdIncidenteOrderByIdDesc(incidete);
     }
 }

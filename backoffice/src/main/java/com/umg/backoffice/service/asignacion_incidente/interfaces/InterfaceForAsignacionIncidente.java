@@ -11,4 +11,6 @@ public interface InterfaceForAsignacionIncidente {
     AsignacionIncidente save(AsignacionIncidente asignacionIncidente);
     AsignacionIncidente cambiarAestadoTerminado(Long id, Integer estado);
 
+    Set<AsignacionIncidente> findAllAsignacionIncidentesByIdIncidente(Long idIncidente);
+
 }

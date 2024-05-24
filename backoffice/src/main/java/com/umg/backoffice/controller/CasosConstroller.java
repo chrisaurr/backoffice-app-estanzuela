@@ -2,6 +2,7 @@ package com.umg.backoffice.controller;
 
 import com.umg.backoffice.modelo.entity.*;
 import com.umg.backoffice.service.Notificacion.service.NotificacionService;
+import com.umg.backoffice.service.asignacion_incidente.service.ServiceForAsignacionIncidente;
 import com.umg.backoffice.service.categoria_incidente.service.CategoriaIncidenteService;
 import com.umg.backoffice.service.incidente.service.IncidenteService;
 import com.umg.backoffice.service.usuario.service.ServiceForUsuario;
@@ -14,9 +15,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -46,6 +49,9 @@ public class CasosConstroller {
 
     @Autowired
     private ServiceForUsuario serviceForUsuario;
+
+    @Autowired
+    private ServiceForAsignacionIncidente serviceForAsignacionIncidente;
 
     private Integer resultado = 0;
 
@@ -83,6 +89,9 @@ public class CasosConstroller {
 
         Set<Usuario> usuarios = serviceForUsuario.findAll();
         mv.addObject("usuarios", usuarios);
+
+        Set<AsignacionIncidente> listadoAsignaciones = serviceForAsignacionIncidente.findAllAsignacionIncidentesByIdIncidente(id);
+        mv.addObject("listadoAsignaciones", listadoAsignaciones);
 
         if (incidente.getDocumentoA() != null) {
             try {
@@ -230,10 +239,24 @@ public class CasosConstroller {
         return mv;
     }
 
+
     @PostMapping("/asignar/{id}")
-    public String asignarCaso(@PathVariable("id") Long id,
-                              @RequestParam("id_usuario")Long idUsuario
+    public String asignarCaso(@PathVariable("id") Long idIncidente,
+                                    @RequestParam("id_usuario")Long idUsuario,
+                                    @RequestParam("comentario")String comentario
     ){
 
+        AsignacionIncidente asignacionIncidente = new AsignacionIncidente();
+        asignacionIncidente.setComentario(comentario);
+        Incidente incidente = new Incidente();
+        incidente.setId(idIncidente);
+        asignacionIncidente.setIdIncidente(incidente);
+        Usuario usuario = new Usuario();
+        usuario.setId(idUsuario);
+        asignacionIncidente.setIdUsuario(usuario);
+
+        serviceForAsignacionIncidente.save(asignacionIncidente);
+
+        return "redirect:/casos/detalle/" + idIncidente;
     }
 }

@@ -48,4 +48,10 @@ public class AsignacionIncidente {
     @JsonBackReference("AsignacionUsuario")
     private Usuario idUsuario;
 
+    @PrePersist
+    private void prePersist() {
+        this.fecha = Instant.now();
+        this.estado = Constants.ESTADO_ACTIVO;
+    }
+
 }
