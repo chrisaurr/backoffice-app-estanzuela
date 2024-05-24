@@ -56,4 +56,9 @@ public class ServiceForAsignacionIncidente implements InterfaceForAsignacionInci
 
         return asignacionIncidenteRepository.findByIdIncidenteOrderByIdDesc(incidete);
     }
+
+    @Override
+    public Object eliminarAsignacionesIncidente(Long idIncidente) {
+        return asignacionIncidenteRepository.updateEstadoAsignacionesIncidentesToZero(idIncidente);
+    }
 }

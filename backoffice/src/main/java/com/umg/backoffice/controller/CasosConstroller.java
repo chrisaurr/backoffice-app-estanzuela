@@ -134,6 +134,14 @@ public class CasosConstroller {
         return mv;
     }
 
+    @PostMapping("/solucionado/detalle/{id}")
+    public ModelAndView solucionadoDetalle(@PathVariable("id") Long id){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/casos/detalle/" + id);
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_SOLUCIONADO);
+        return mv;
+    }
+
     private String getFileExtension(Path rutaArchivo) {
         String nombreArchivo = rutaArchivo.getFileName().toString();
         int index = nombreArchivo.lastIndexOf('.');
@@ -153,6 +161,14 @@ public class CasosConstroller {
         return mv;
     }
 
+    @PostMapping("/no-aplica/detalle/{id}")
+    public ModelAndView noAplicaDetalle(@PathVariable("id") Long id){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/casos/detalle/" + id);
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_NO_APLICA);
+        return mv;
+    }
+
     @PostMapping("/eliminar/{id}")
     public ModelAndView eliminarCase(@PathVariable("id") Long id){
         ModelAndView mv = new ModelAndView();
@@ -161,6 +177,15 @@ public class CasosConstroller {
         if(result)resultado = 1;
         else resultado = 0;
         return mv;
+    }
+
+    @PostMapping("/eliminar/detalle/{id}")
+    public String eliminarDesdeDetalle(@PathVariable("id") Long id){
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_ELIMINADO);
+        if(result)resultado = 1;
+        else resultado = 0;
+        serviceForAsignacionIncidente.eliminarAsignacionesIncidente(id);
+        return "redirect:/casos/all";
     }
 
     @GetMapping("/buscar")
@@ -257,6 +282,17 @@ public class CasosConstroller {
 
         serviceForAsignacionIncidente.save(asignacionIncidente);
 
+        return "redirect:/casos/detalle/" + idIncidente;
+    }
+
+    @PostMapping("/marcar-completado/{id}/{idIncidente}")
+    public String marcarTareaCompletada(@PathVariable("id")Long id, @PathVariable("idIncidente")Long idIncidente)
+    {
+        AsignacionIncidente asignacionIncidente = serviceForAsignacionIncidente.findOneAsignacion(id);
+        if(asignacionIncidente == null){ return "redirect:/casos/detalle/" + idIncidente; }
+
+        asignacionIncidente.setEstado(Constants.ESTADO_ELIMINADO);
+        serviceForAsignacionIncidente.save(asignacionIncidente);
         return "redirect:/casos/detalle/" + idIncidente;
     }
 }

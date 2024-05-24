@@ -13,4 +13,6 @@ public interface InterfaceForAsignacionIncidente {
 
     Set<AsignacionIncidente> findAllAsignacionIncidentesByIdIncidente(Long idIncidente);
 
+    Object eliminarAsignacionesIncidente(Long idIncidente);
+
 }

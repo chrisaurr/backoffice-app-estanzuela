@@ -164,8 +164,8 @@
                                             <td th:text="${asignacion.getComentario()}"></td>
                                             <td th:if="${asignacion.getEstado() == 1}">SIN PROCESO</td>
                                             <td th:if="${asignacion.getEstado() == 0}">TERMINADO</td>
-                                            <td>
-                                                <form th:id="@{'form_completado_' + ${asignacion.getId()}}" th:action="@{'/casos/marcar-completado/' + ${asignacion.getId()}}" method="post">
+                                            <td th:if="${asignacion.getEstado() == 1}">
+                                                <form th:id="@{'form_completado_' + ${asignacion.getId()}}" th:action="@{'/casos/marcar-completado/' + ${asignacion.getId()} + '/' + ${incidente.getId()}}" method="post">
                                                     <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoCompletado(' + ${asignacion.getId()} + ')'">Marcar completado</button>
                                                 </form>
                                             </td>
@@ -186,22 +186,29 @@
                                         Cambiar estado
                                     </button>
                                     <div class="dropdown-menu">
-                                        <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/' + ${incidente.getId()}}" method="post">
+                                        <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/detalle/' + ${incidente.getId()}}" method="post">
                                             <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</button>
                                         </form>
-                                        <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/' + ${incidente.getId()}}" method="post">
+                                        <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/detalle/' + ${incidente.getId()}}" method="post">
                                             <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</button>
                                         </form>
                                         <div class="dropdown-divider"></div>
-                                        <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/' + ${incidente.getId()}}" method="post">
+                                        <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/detalle/' + ${incidente.getId()}}" method="post">
                                             <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
                                         </form>
                                     </div>
                                 </div>
 
+                                <div class="col-md-4">
+                                    <label style="color: red; text-align: center" th:if="${incidente.getEstado() == 0}">INCIDENTE ELIMINADO</label>
+                                    <label style="color: blue; text-align: center" class="form-control" th:if="${incidente.getEstado() == 1}">INCIDENTE SIN PROCESO</label>
+                                    <label style="color: green; text-align: center" class="form-control" th:if="${incidente.getEstado() == 2}">INCIDENTE SOLUCIONADO</label>
+                                    <label style="color: darkblue; text-align: center" class="form-control" th:if="${incidente.getEstado() == 3}">INCIDENTE NO APLICA</label>
+                                </div>
+
                             </div>
                             <hr/>
-                            <div style="height: 400px; width: 100%" id="map"></div>
+                            <div style="height: 1000px; width: 100%" id="map"></div>
                             <hr/>
                             <div class="row">
                                 <div class="col-6">
