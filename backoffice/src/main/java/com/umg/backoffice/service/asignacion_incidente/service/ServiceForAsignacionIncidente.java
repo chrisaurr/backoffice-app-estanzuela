@@ -6,6 +6,8 @@ import com.umg.backoffice.modelo.entity.Usuario;
 import com.umg.backoffice.repository.AsignacionIncidenteRepository;
 import com.umg.backoffice.service.asignacion_incidente.interfaces.InterfaceForAsignacionIncidente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +21,10 @@ public class ServiceForAsignacionIncidente implements InterfaceForAsignacionInci
 
     @Transactional(readOnly = true)
     @Override
-    public Set<AsignacionIncidente> findAll(Long userId, Integer estado) {
+    public Page<AsignacionIncidente> findAll(Long userId, Integer estado, Pageable pageable) {
         Usuario usuario = new Usuario();
         usuario.setId(userId);
-        return asignacionIncidenteRepository.findByIdUsuarioAndEstadoOrderByIdDesc(usuario, estado);
+        return asignacionIncidenteRepository.findByIdUsuarioAndEstadoOrderByIdDesc(usuario, estado, pageable);
     }
 
     @Transactional(readOnly = true)

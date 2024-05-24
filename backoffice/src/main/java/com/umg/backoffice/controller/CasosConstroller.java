@@ -77,10 +77,87 @@ public class CasosConstroller {
         return mv;
     }
 
+    @GetMapping("/usuarios/all")
+    public ModelAndView allCasesByUser(
+            @RequestParam(name = "page",
+                    defaultValue = "0")int page,
+            Authentication authentication
+    ) {
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/casos_asignados/listar");
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<AsignacionIncidente> listadoDeAsignaciones = incidenteService.getAsignacionesByUserName(authentication.getName(), pageable);
+
+        int totalPages = listadoDeAsignaciones.getTotalPages();
+
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            mv.addObject("pageNumbers", pageNumbers);
+        }
+        List<CategoriaIncidente> allCategorias = categoriaIncidenteService.getAllCategoriaIncidente(Constants.ESTADO_ELIMINADO);
+        mv.addObject("listadoDeAsignaciones", listadoDeAsignaciones);
+        mv.addObject("actualizado", resultado);
+        mv.addObject("allCategorias", allCategorias);
+        mv.addObject("url", "all");
+        resultado = 0;
+        return mv;
+    }
+
     @GetMapping("/detalle/{id}")
     public ModelAndView detalleCase(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/casos/detalle");
+        Incidente incidente = incidenteService.getIncidenteById(id, Constants.ESTADO_ELIMINADO);
+        mv.addObject("incidente", incidente);
+
+        List<Notificacion> notificaciones = notificacionService.getNotificacionesByIncidente(id, Constants.ESTADO_ACTIVO);
+        mv.addObject("notificaciones", notificaciones);
+
+        Set<Usuario> usuarios = serviceForUsuario.findAll();
+        mv.addObject("usuarios", usuarios);
+
+        Set<AsignacionIncidente> listadoAsignaciones = serviceForAsignacionIncidente.findAllAsignacionIncidentesByIdIncidente(id);
+        mv.addObject("listadoAsignaciones", listadoAsignaciones);
+
+        if (incidente.getDocumentoA() != null) {
+            try {
+                String uploadDir = incidente.getDocumentoA();
+                Path directorio = Paths.get(uploadDir);
+                String extension = getFileExtension(directorio);
+                byte[] resource = Files.readAllBytes(directorio);
+                String documentoA = Base64.getEncoder().encodeToString(resource);
+                documentoA = "data:image/" + extension + ";base64," + documentoA;
+                mv.addObject("documentoA", documentoA);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if (incidente.getDocumentoB() != null) {
+            try {
+                String uploadDir = incidente.getDocumentoB();
+                Path directorio = Paths.get(uploadDir);
+                String extension = getFileExtension(directorio);
+                byte[] resourceB = Files.readAllBytes(directorio);
+                String documentoB = Base64.getEncoder().encodeToString(resourceB);
+                documentoB = "data:image/" + extension + ";base64," + documentoB;
+                mv.addObject("documentoB", documentoB);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return mv;
+    }
+
+    @GetMapping("/usuarios/detalle/{id}")
+    public ModelAndView usuariosDetalleCase(@PathVariable("id") Long id) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("/casos_asignados/detalle");
         Incidente incidente = incidenteService.getIncidenteById(id, Constants.ESTADO_ELIMINADO);
         mv.addObject("incidente", incidente);
 
@@ -142,6 +219,14 @@ public class CasosConstroller {
         return mv;
     }
 
+    @PostMapping("/solucionado/usuarios/detalle/{id}")
+    public ModelAndView solucionadoUsuariosDetalle(@PathVariable("id") Long id){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/casos/usuarios/detalle/" + id);
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_SOLUCIONADO);
+        return mv;
+    }
+
     private String getFileExtension(Path rutaArchivo) {
         String nombreArchivo = rutaArchivo.getFileName().toString();
         int index = nombreArchivo.lastIndexOf('.');
@@ -158,6 +243,14 @@ public class CasosConstroller {
         Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_NO_APLICA);
         if(result)resultado = 1;
         else resultado = 0;
+        return mv;
+    }
+
+    @PostMapping("/no-aplica/usuarios/detalle/{id}")
+    public ModelAndView noAplicaUsuariosDetalle(@PathVariable("id") Long id){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("redirect:/casos/usuarios/detalle/" + id);
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_NO_APLICA);
         return mv;
     }
 
@@ -186,6 +279,15 @@ public class CasosConstroller {
         else resultado = 0;
         serviceForAsignacionIncidente.eliminarAsignacionesIncidente(id);
         return "redirect:/casos/all";
+    }
+
+    @PostMapping("/eliminar/usuarios/detalle/{id}")
+    public String eliminarUsuariosDesdeDetalle(@PathVariable("id") Long id){
+        Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_ELIMINADO);
+        if(result)resultado = 1;
+        else resultado = 0;
+        serviceForAsignacionIncidente.eliminarAsignacionesIncidente(id);
+        return "redirect:/casos/usuarios/all";
     }
 
     @GetMapping("/buscar")
@@ -294,5 +396,16 @@ public class CasosConstroller {
         asignacionIncidente.setEstado(Constants.ESTADO_ELIMINADO);
         serviceForAsignacionIncidente.save(asignacionIncidente);
         return "redirect:/casos/detalle/" + idIncidente;
+    }
+
+    @PostMapping("/marcar-completado/usuarios/{id}/{idIncidente}")
+    public String marcarTareaCompletadaUsuarios(@PathVariable("id")Long id, @PathVariable("idIncidente")Long idIncidente)
+    {
+        AsignacionIncidente asignacionIncidente = serviceForAsignacionIncidente.findOneAsignacion(id);
+        if(asignacionIncidente == null){ return "redirect:/casos/usuarios/detalle/" + idIncidente; }
+
+        asignacionIncidente.setEstado(Constants.ESTADO_ELIMINADO);
+        serviceForAsignacionIncidente.save(asignacionIncidente);
+        return "redirect:/casos/usuarios/detalle/" + idIncidente;
     }
 }

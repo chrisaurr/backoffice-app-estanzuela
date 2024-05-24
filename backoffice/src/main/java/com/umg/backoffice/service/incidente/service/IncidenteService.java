@@ -1,11 +1,12 @@
 package com.umg.backoffice.service.incidente.service;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
-import com.umg.backoffice.modelo.entity.Ciudadano;
-import com.umg.backoffice.modelo.entity.Constants;
-import com.umg.backoffice.modelo.entity.Incidente;
+import com.umg.backoffice.modelo.entity.*;
 import com.umg.backoffice.repository.IncidenteRepository;
+import com.umg.backoffice.service.asignacion_incidente.service.ServiceForAsignacionIncidente;
 import com.umg.backoffice.service.incidente.interfaces.InterfaceForIncidenteService;
+import com.umg.backoffice.service.usuario.service.ServiceForUsuario;
+import groovy.transform.builder.InitializerStrategy;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,13 +14,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class IncidenteService implements InterfaceForIncidenteService {
 
     @Autowired
     private IncidenteRepository incidenteRepository;
+    
+    @Autowired
+    private ServiceForUsuario serviceForUsuario;
+
+    @Autowired
+    private ServiceForAsignacionIncidente serviceForAsignacionIncidente;
 
     @Transactional(readOnly=true)
     @Override
@@ -91,14 +100,28 @@ public class IncidenteService implements InterfaceForIncidenteService {
         return incidenteRepository.findByIdCiudadanoAndEstadoNot(ciudadano, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
     public Incidente getIncidenteById(Long id, Integer estado) {
         return incidenteRepository.findByIdAndEstadoNot(id, estado);
     }
 
+    @Transactional(readOnly=true)
     @Override
     public Page<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin, Pageable pageable) {
         return incidenteRepository.busquedaCompuesta(descripcion, direccion, estado, categoriaIncidente, fechaInicio, fechaFin, pageable);
     }
+
+    @Transactional(readOnly=true)
+    @Override
+    public Page<AsignacionIncidente> getAsignacionesByUserName(String userName, Pageable pageable) {
+
+        Usuario usuario = serviceForUsuario.findByUserName(userName, Constants.ESTADO_ELIMINADO).orElse(null);
+
+        if(usuario == null)return null;
+
+        return serviceForAsignacionIncidente.findAll(usuario.getId(), Constants.ESTADO_ACTIVO, pageable);
+    }
+
 
 }

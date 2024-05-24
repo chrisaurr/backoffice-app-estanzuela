@@ -1,5 +1,6 @@
 package com.umg.backoffice.service.incidente.interfaces;
 
+import com.umg.backoffice.modelo.entity.AsignacionIncidente;
 import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Ciudadano;
 import com.umg.backoffice.modelo.entity.Incidente;
@@ -33,4 +34,6 @@ public interface InterfaceForIncidenteService {
     Incidente getIncidenteById(Long id, Integer estado);
 
     Page<Incidente> busquedaCompuesta(String descripcion, String direccion, Integer estado, CategoriaIncidente categoriaIncidente, Instant fechaInicio, Instant fechaFin, Pageable pageable);
+
+    Page<AsignacionIncidente>getAsignacionesByUserName(String userName, Pageable pageable);
 }
