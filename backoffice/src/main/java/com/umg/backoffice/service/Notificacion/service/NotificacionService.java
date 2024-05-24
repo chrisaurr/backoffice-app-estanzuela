@@ -53,4 +53,9 @@ public class NotificacionService implements InterfaceForNotificacion {
     public List<Notificacion> getNotificacionesByEstado(Integer estado) {
         return notificacionRepository.findByEstadoNotOrderByIdDesc(estado);
     }
+
+    @Override
+    public List<Notificacion> getAllNotificacionesByIncidente(Long id) {
+        return notificacionRepository.findByIdIncidente_Id(id);
+    }
 }

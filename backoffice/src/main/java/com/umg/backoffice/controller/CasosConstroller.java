@@ -84,7 +84,7 @@ public class CasosConstroller {
         Incidente incidente = incidenteService.getIncidenteById(id, Constants.ESTADO_ELIMINADO);
         mv.addObject("incidente", incidente);
 
-        List<Notificacion> notificaciones = notificacionService.getNotificacionesByIncidente(id, Constants.ESTADO_ACTIVO);
+        List<Notificacion> notificaciones = notificacionService.getAllNotificacionesByIncidente(id);
         mv.addObject("notificaciones", notificaciones);
 
         Set<Usuario> usuarios = serviceForUsuario.findAll();
@@ -128,9 +128,28 @@ public class CasosConstroller {
     public ModelAndView solucionadoCase(@PathVariable("id") Long id){
         ModelAndView mv = new ModelAndView();
         mv.setViewName("redirect:/casos/all");
+
         Boolean result = incidenteService.updateEstadoIncidente(id, Constants.ESTADO_SOLUCIONADO);
-        if(result)resultado = 1;
+
+        if(result) {
+            try {
+                Incidente incidente = incidenteService.getIncidenteById(id, Constants.ESTADO_ELIMINADO);
+                Notificacion notificacion = new Notificacion();
+                notificacion.setIdIncidente(incidente);
+                notificacion.setDescripcion("Incidente ha sido solucionado.");
+                notificacion.setEstado(Constants.ESTADO_ACTIVO);
+                notificacion.setFecha(Instant.now());
+                notificacion.setIdCiudadano(0L);
+                notificacion.setIsIncident(0L);
+                notificacionService.saveNewNotificacion(notificacion);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(result) resultado = 1;
         else resultado = 0;
+
         return mv;
     }
 

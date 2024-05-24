@@ -16,4 +16,6 @@ public interface InterfaceForNotificacion {
 
     List<Notificacion> getNotificacionesByEstado(Integer estado);
 
+    List<Notificacion> getAllNotificacionesByIncidente(Long id);
+
 }
