@@ -6,23 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear usuario</title>
-
-    <style>
-        .card-body {
-            padding: 20px;
-        }
-        .form-container {
-            padding: 20px;
-        }
-        .btn-submit {
-            display: flex;
-            justify-content: center;
-        }
-        .btn-submit button {
-            display: flex;
-            align-items: center;
-        }
-    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -33,16 +16,22 @@
                 <div class="col-sm-6">
                     <h1>Agregar un nuevo usuario</h1>
                 </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Simple Tables</li>
+                    </ol>
+                </div>
             </div>
         </div><!-- /.container-fluid -->
     </section>
 
     <section class="content">
         <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
                     <div class="card">
-                        <div class="card-body form-container">
+                        <div class="container">
                             <form id="crear_nuevo" th:action="${'/signup'}" method="post">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -109,9 +98,9 @@
                                         <label for="areaTrabajo">Seleccione area de trabajo</label>
                                         <select class="form-control" name="areaTrabajo" id="areaTrabajo">
                                             <option
-                                                    th:each="areaTrabajo: ${listadoAreaTrabajo}"
-                                                    th:value="${areaTrabajo.getId()}"
-                                                    th:text="${areaTrabajo.getNombre()}"
+                                                th:each="areaTrabajo: ${listadoAreaTrabajo}"
+                                                th:value="${areaTrabajo.getId()}"
+                                                th:text="${areaTrabajo.getNombre()}"
                                             >
                                             </option>
                                         </select>
@@ -120,9 +109,9 @@
                                         <label for="role">Seleccione Rol</label>
                                         <select class="form-control" name="idRol" id="role">
                                             <option
-                                                    th:each="rol: ${listadoRoles}"
-                                                    th:value="${rol.getId()}"
-                                                    th:text="${rol.getNombreRol()}"
+                                                th:each="rol: ${listadoRoles}"
+                                                th:value="${rol.getId()}"
+                                                th:text="${rol.getNombreRol()}"
                                             >
                                             </option>
                                         </select>
@@ -138,12 +127,9 @@
                                         <input type="password" class="form-control" id="inputConfirmPass" required>
                                     </div>
                                 </div>
-                                <div class="form-group btn-submit">
-                                    <button type="submit" th:onclick="validarPassword()" class="btn btn-primary">
-                                        <i class="fas fa-save mr-2"></i>Guardar
-                                    </button>
-                                </div>
+                                <button type="submit" th:onclick="validarPassword()" class="btn btn-primary">Guardar</button>
                             </form>
+
                         </div>
                         <!-- /.card-body -->
                     </div>

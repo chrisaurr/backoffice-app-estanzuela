@@ -6,6 +6,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Listado de Roles</title>
+
+    <style>
+        .btn-group-inline {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .btn-group-inline form {
+            display: inline;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,12 +26,6 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Listado de Roles</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Simple Tables</li>
-                    </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -34,8 +38,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-crear">
-                                Nuevo Rol
+                            <button type="button" class="btn btn-success d-flex align-items-center" data-toggle="modal" data-target="#modal-crear">
+                                <i class="fas fa-plus mr-2"></i> Nuevo Rol
                             </button>
                         </div>
                         <!-- /.card-header -->
@@ -54,11 +58,18 @@
                                     <td th:text="${rol.id}"></td>
                                     <td th:text="${rol.nombreRol}"></td>
                                     <td>
-                                        <a th:href="'/role/editar/' + ${rol.id}" class="btn btn-primary eBtn" th:onclick="editarRole(event)">Editar</a>
-
-                                        <form th:id="@{'form_eliminar_' + ${rol.id}}" th:action="@{'/role/eliminar/' + ${rol.getId()}}" method="post">
-                                            <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${rol.getId()} + ')'">Eliminar</button>
-                                        </form>
+                                        <div class="btn-group-inline">
+                                            <a th:href="'/role/editar/' + ${rol.id}" class="btn btn-primary btn-sm" onclick="editarRole(event)">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                        </div>
+                                        <div class="btn-group-inline">
+                                            <form th:id="@{'form_eliminar_' + ${rol.id}}" th:action="@{'/role/eliminar/' + ${rol.getId()}}" method="post">
+                                                <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${rol.getId()} + ')'">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -78,13 +89,11 @@
 
 </div>
 
-
 <th:block layout:fragment="script">
-
     <script type="text/javascript">
         function editarRole(event) {
             event.preventDefault();
-            var href = $(event.target).attr('href');
+            var href = event.currentTarget.getAttribute('href');
 
             $.get(href, function (role) {
                 if (role && role.id) {
@@ -98,6 +107,7 @@
                 }
             });
         }
+
         const consultarCambiarEstadoEliminado = id => {
             document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
                 e.preventDefault();
@@ -118,8 +128,6 @@
             });
         }
     </script>
-
 </th:block>
-
 </body>
 </html>

@@ -16,4 +16,6 @@ public interface NotificacionRepository extends JpaRepository<Notificacion, Long
 
     List<Notificacion> findByIdIncidente_IdAndEstado(Long incidenteId, Integer estado);
 
+    List<Notificacion> findByIdIncidente_Id(Long incidenteId);
+
 }
