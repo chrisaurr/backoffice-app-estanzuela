@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class Incidente {
     private String documentoB;
 
     @Column(name = "fecha")
-    private Instant fecha;
+    private Date fecha;
 
     @NotNull
     @Column(name = "estado", nullable = false)

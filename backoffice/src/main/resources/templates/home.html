@@ -14,10 +14,6 @@
     <h2>Home Page</h2>
     <p>Home Contents</p>
     <p>Home Contents</p>
-    <div sec:authorize="isAuthenticated()">
-        <p><span>Usuario:<span sec:authentication="name"></span></span></p>
-        <p><span>ROL:<span sec:authentication="principal.getAuthorities()"></span></span></p>
-    </div>
 </div>
 
 <th:block layout:fragment="script">

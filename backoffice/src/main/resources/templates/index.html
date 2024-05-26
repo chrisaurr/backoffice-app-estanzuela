@@ -11,11 +11,6 @@
 <body>
 
 <div layout:fragment="content">
-    <div sec:authorize="isAuthenticated()">
-        <p><span>Usuario:<span sec:authentication="name"></span></span></p>
-        <p><span>ROL:<span sec:authentication="principal.authorities"></span></span></p>
-        <span>HOLA</span>
-    </div>
 
     <div class="container">
         <main style="margin-top: 5em; margin-bottom: 5em; display: flex; align-items: center; justify-content: center">
