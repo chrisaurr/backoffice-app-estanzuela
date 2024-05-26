@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>LISTADO DE INCIDENTES</h1>
+                    <h1>LISTADO DE TAREAS</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -36,75 +36,6 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
-                                <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
-                                        <input
-                                                type="text"
-                                                class="form-control"
-                                                id="filtro_descripcion"
-                                                name="filtro_descripcion"
-                                                th:value="${filtroDescripcion}"
-                                        >
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="col-form-label" for="filtro_direccion">Filtrar por direccion</label>
-                                        <input
-                                                type="text"
-                                                class="form-control"
-                                                id="filtro_direccion"
-                                                name="filtro_direccion"
-                                                th:value="${filtroDireccion}"
-                                        >
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="col-form-label" for="filtro_estado">Filtrar por estado</label>
-                                        <select class="form-control" name="filtro_estado" id="filtro_estado">
-                                            <option value=0 >- Seleccionar -</option>
-                                            <option th:selected="${filtroEstado == 1}" value=1 >Sin Proceso</option>
-                                            <option th:selected="${filtroEstado == 2}" value=2 >Solucionado</option>
-                                            <option th:selected="${filtroEstado == 3}" value=3 >No aplica</option>
-                                            <option th:selected="${filtroEstado == 4}" value=4 >Eliminado</option><!--se pasa 4 pero en el backend es cero ya que el cero no lo pasa, lo toma como si no hay-->
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="col-form-label" for="filtro_categoria">Filtrar por categoria</label>
-                                        <select class="form-control" name="filtro_categoria" id="filtro_categoria">
-                                            <option value=0 >- Seleccionar -</option>
-                                            <option
-                                                    th:each="categoria: ${allCategorias}"
-                                                    th:value="${categoria.getId()}"
-                                                    th:text="${categoria.getNombre()}"
-                                                    th:selected="${filtroCategoria == categoria.getId()}"
-                                            >
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="col-form-label" for="filtro_fecha_inicio">Filtrar por fecha inicial</label>
-                                        <input
-                                                type="date"
-                                                class="form-control"
-                                                id="filtro_fecha_inicio"
-                                                name="filtro_fecha_inicio"
-                                                th:value="${filtroFechaInicio}"
-                                        >
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="col-form-label" for="filtro_fecha_final">Filtrar por fecha final</label>
-                                        <input
-                                                type="date"
-                                                class="form-control"
-                                                id="filtro_fecha_final"
-                                                name="filtro_fecha_final"
-                                                th:value="${filtroFechaFinal}"
-                                        >
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary">Buscar</button>
-                            </form>
                             <hr/>
                             <div class="table-responsive">
                             <table class="table table-bordered">
