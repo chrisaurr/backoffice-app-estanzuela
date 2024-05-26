@@ -116,8 +116,8 @@
                                                     </button>
                                                 </div>
                                                 <div class="btn-group-inline">
-                                                    <form th:id="@{'form_eliminar_' + ${notificacion.id}}" th:action="@{'/notificacion/eliminar/' + ${notificacion.getId()}}" method="post" th:if="${notificacion.estado == 1}">
-                                                        <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${notificacion.getId()} + ')'">
+                                                    <form th:id="@{'form_eliminar_notificacion_' + ${notificacion.id}}" th:action="@{'/notificacion/eliminar/' + ${notificacion.getId()}}" method="post" th:if="${notificacion.estado == 1}">
+                                                        <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminadoNotificacion(' + ${notificacion.getId()} + ')'">
                                                             <i class="fas fa-trash-alt"></i> Eliminar
                                                         </button>
                                                     </form>
@@ -363,6 +363,26 @@
                 if (result.isConfirmed) {
                     Swal.fire("Confirmado, procediendo", "", "success");
                     document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+
+        const consultarCambiarEstadoEliminadoNotificacion = id => {
+            document.getElementById('form_eliminar_notificacion_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas marcar como leida la notificacion?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_notificacion_' + id).submit();
                 } else if (result.isDenied) {
                     Swal.fire("Cambios cancelados", "", "info");
                 }

@@ -55,6 +55,26 @@ public class NotificacionController {
         return mv;
     }
 
+    @PostMapping("/usuarios/add")
+    public ModelAndView addNotificacionUsuarios(@ModelAttribute Notificacion notificacion, @RequestParam Long incidenteId) {
+        ModelAndView mv = new ModelAndView();
+        try {
+            Incidente incidente = incidenteService.getIncidenteById(incidenteId, Constants.ESTADO_ELIMINADO);
+            notificacion.setIdIncidente(incidente);
+            notificacion.setEstado(Constants.ESTADO_ACTIVO);
+            notificacion.setFecha(Instant.now());
+            notificacion.setIdCiudadano(0L);
+            notificacion.setIsIncident(0L);
+            notificacionService.saveNewNotificacion(notificacion);
+
+            mv.setViewName("redirect:/casos/usuarios/detalle/" + incidenteId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("redirect:/");
+        }
+        return mv;
+    }
+
     @GetMapping("/editar/{id}")
     @ResponseBody
     public Notificacion mostrarModalEditar(@PathVariable Long id) {
@@ -76,6 +96,21 @@ public class NotificacionController {
         return mv;
     }
 
+    @PostMapping("/usuarios/editar")
+    public ModelAndView editarDescripcionNotificacionUsuarios(@RequestParam Long id, @RequestParam String descripcion) {
+        ModelAndView mv = new ModelAndView();
+        try {
+            Notificacion notificacion = notificacionService.getNotificacionById(id, Constants.ESTADO_ELIMINADO);
+            notificacion.setDescripcion(descripcion);
+            notificacionService.saveNewNotificacion(notificacion);
+            mv.setViewName("redirect:/casos/usuarios/detalle/" + notificacion.getIdIncidente().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("redirect:/");
+        }
+        return mv;
+    }
+
     @PostMapping("/eliminar/{id}")
     public ModelAndView eliminarNotificacion(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView();
@@ -84,6 +119,21 @@ public class NotificacionController {
             notificacion.setEstado(Constants.ESTADO_ELIMINADO);
             notificacionService.saveNewNotificacion(notificacion);
             mv.setViewName("redirect:/casos/detalle/" + notificacion.getIdIncidente().getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mv.setViewName("redirect:/");
+        }
+        return mv;
+    }
+
+    @PostMapping("/eliminar/usuarios/{id}")
+    public ModelAndView eliminarNotificacionUsuarios(@PathVariable("id") Long id) {
+        ModelAndView mv = new ModelAndView();
+        try {
+            Notificacion notificacion = notificacionService.getNotificacionById(id, Constants.ESTADO_ELIMINADO);
+            notificacion.setEstado(Constants.ESTADO_ELIMINADO);
+            notificacionService.saveNewNotificacion(notificacion);
+            mv.setViewName("redirect:/casos/usuarios/detalle/" + notificacion.getIdIncidente().getId());
         } catch (Exception e) {
             e.printStackTrace();
             mv.setViewName("redirect:/");
