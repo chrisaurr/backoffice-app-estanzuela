@@ -120,7 +120,7 @@
                                 <tbody>
                                 <tr th:each="asignacion: ${listadoDeAsignaciones.content}">
                                     <th scope="row" th:text="${asignacion.getId()}"></th>
-                                    <td th:text="${asignacion.getFecha()}"></td>
+                                    <td th:text="${#dates.format(asignacion.getFecha(), 'dd-MM-yyyy HH:mm')}"></td>
                                     <td th:text="${asignacion.getComentario()}"></td>
                                     <td th:text="${asignacion.getIdIncidente.getId()}"></td>
                                     <td>

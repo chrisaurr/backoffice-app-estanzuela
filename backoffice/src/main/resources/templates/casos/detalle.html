@@ -172,6 +172,7 @@
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
+                                            <th>FECHA DE ASIGNACION</th>
                                             <th>USUARIO</th>
                                             <th>COMENTARIO</th>
                                             <th>ESTADO</th>
@@ -180,6 +181,7 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="asignacion : ${listadoAsignaciones}">
+                                            <td th:text="${#dates.format(asignacion.getFecha(),'dd-MM-yyyy HH:mm')}"></td>
                                             <td th:text="${asignacion.getIdUsuario().getNombre()}"></td>
                                             <td th:text="${asignacion.getComentario()}"></td>
                                             <td th:if="${asignacion.getEstado() == 1}">SIN PROCESO</td>
@@ -285,6 +287,47 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
+
+        const consultarCambiarEstadoNoAplica = id => {
+            document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas marcar este caso como solucionado?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_no_aplica_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+
+        const consultarCambiarEstadoSolucionado = id => {
+            document.getElementById('form_solucionado_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas marcar este caso como solucionado?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_solucionado_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+
 
         const consultarCambiarEstadoCompletado = id => {
             document.getElementById('form_completado_' + id).addEventListener('submit', function (e){

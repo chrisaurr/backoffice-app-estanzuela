@@ -20,7 +20,7 @@ public interface AsignacionIncidenteRepository extends JpaRepository<AsignacionI
 
     Set<AsignacionIncidente> findByIdIncidenteOrderByIdDesc(Incidente incidente);
 
-    @Modifying
+    //@Modifying
     @Query(value = "UPDATE asignacion_incidente SET estado = 0 WHERE id_incidente = :idIncidente", nativeQuery = true)
     Object updateEstadoAsignacionesIncidentesToZero(@Param("idIncidente") Long idIncidente);
 

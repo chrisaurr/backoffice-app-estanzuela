@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class AsignacionIncidente {
 
     @NotNull
     @Column(name = "fecha", nullable = false)
-    private Instant fecha;
+    private Date fecha;
 
     @NotNull
     @Column(name = "estado", nullable = false)
@@ -50,7 +51,7 @@ public class AsignacionIncidente {
 
     @PrePersist
     private void prePersist() {
-        this.fecha = Instant.now();
+        this.fecha = new Date();
         this.estado = Constants.ESTADO_ACTIVO;
     }
 
