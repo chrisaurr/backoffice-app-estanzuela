@@ -35,24 +35,27 @@
                     </a>
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a class="nav-link" href="#">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Casos
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/casos/all}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <div sec:authorize="hasRole('Administrador')">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link" href="#">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Casos
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/casos/all}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
 
+                <!--
                 <li class="nav-item has-treeview">
                     <a class="nav-link" href="#">
                         <i class="nav-icon fas fa-copy"></i>
@@ -70,25 +73,30 @@
                         </li>
                     </ul>
                 </li>
+                -->
 
-                <li class="nav-item has-treeview">
-                    <a class="nav-link" href="#">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Areas de Trabajo
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/area-trabajo/all}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <div sec:authorize="hasRole('Administrador')">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link" href="#">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Areas de Trabajo
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/area-trabajo/all}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
 
+                <!--OCULTANDO ROLES PORQUE SOLO DEBERAN EXISTIR 2 ROLES EN LA BASE DE DATOS
+                ESTOS ROLES DEBERAN SER 1.Administrador y 2.Operador
                 <li class="nav-item has-treeview">
                     <a class="nav-link" href="#">
                         <i class="nav-icon fas fa-copy"></i>
@@ -106,48 +114,54 @@
                         </li>
                     </ul>
                 </li>
+                -->
 
                 <!-- Línea divisoria -->
                 <li class="nav-item">
                     <hr class="dropdown-divider" style="border-top: 1px solid rgba(128, 128, 128, 0.5); margin: 0.5rem 0;">
                 </li>
 
-                <li class="nav-item has-treeview">
-                    <a class="nav-link" href="#">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Usuarios
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/usuario/all}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <div sec:authorize="hasRole('Administrador')">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link" href="#">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Usuarios
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/usuario/all}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
 
-                <li class="nav-item has-treeview">
-                    <a class="nav-link" href="#">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            Casos asignados
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/casos/usuarios/all}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Listar</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                <div sec:authorize="hasRole('Operador')">
+                    <li class="nav-item has-treeview">
+                        <a class="nav-link" href="#">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Casos asignados
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/casos/usuarios/all}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Listar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
 
+                <!--
                 <li class="nav-item">
                     <a class="nav-link" href="/contact">
                         <i class="nav-icon fas fa-th"></i>
@@ -161,6 +175,7 @@
                         <p>About</p>
                     </a>
                 </li>
+                -->
 
             </ul>
         </nav>
