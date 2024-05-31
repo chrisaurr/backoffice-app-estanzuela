@@ -46,8 +46,10 @@
                   <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
               </form>
-              <div>
-                <a th:href="'/usuario/nuevo'" type="button" class = "btn-primary">Agregar nuevo</a>
+              <div class="d-flex justify-content-start mb-3 mt-4">
+                <a th:href="'/usuario/nuevo'" class="btn btn-success">
+                  <i class="fas fa-user-plus mr-2"></i> Agregar nuevo
+                </a>
               </div>
               <div th:if="${param.usuarioexiste}">No se puede guardar el usuario con username existente en la base de datos</div>
               <hr/>
