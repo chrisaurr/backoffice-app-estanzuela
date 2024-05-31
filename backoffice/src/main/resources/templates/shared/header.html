@@ -4,20 +4,16 @@
     <ul class="navbar-nav ml-auto">
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown user-menu show" sec:authorize="isAuthenticated()">
-            <a aria-expanded="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-                <img alt="User Image" class="user-image img-circle elevation-2"
-                     src="/webjars/AdminLTE/3.2.0/dist/img/user2-160x160.jpg">
+            <a aria-expanded="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" style="display: flex; align-items: center; padding: 0.5rem 1rem; background-color: #f8f9fa; border-radius: 5px;">
+                <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
                 <span class="d-none d-md-inline" sec:authentication="name"></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <!-- User image -->
-                <li class="user-header bg-primary">
-                    <img alt="User Image" class="img-circle elevation-2"
-                         src="/webjars/AdminLTE/3.2.0/dist/img/user2-160x160.jpg">
-
-                    <p>
-                        <span sec:authentication="name"></span>
-                        <small sec:authentication="principal.authorities"></small>
+                <!-- User Info -->
+                <li class="user-info bg-primary" style="padding: 10px; text-align: center;">
+                    <p class="mb-0" style="margin: 0;">
+                        <span sec:authentication="name" style="display: block;"></span>
+                        <small sec:authentication="principal.authorities" style="display: block;"></small>
                     </p>
                 </li>
                 <!-- Menu Footer-->

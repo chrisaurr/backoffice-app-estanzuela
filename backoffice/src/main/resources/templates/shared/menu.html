@@ -1,25 +1,13 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4" xmlns:sec="http://www.w3.org/1999/xhtml">
     <!-- Brand Logo -->
-    <a class="brand-link" href="/">
-        <img alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-             src="/webjars/AdminLTE/3.2.0/dist/img/AdminLTELogo.png"
-             style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    <a class="brand-link d-flex align-items-center" href="/">
+        <img alt="AdminLTE Logo" class="brand-image img-circle elevation-3" src="/img/logo.jpeg" style="opacity: .8; margin-right: 10px;">
+        <span class="brand-text font-weight-light" style="line-height: 60px;">MENÚ</span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex" sec:authorize="isAuthenticated()">
-            <div class="image">
-                <img alt="User Image" class="img-circle elevation-2"
-                     src="/webjars/AdminLTE/3.2.0/dist/img/user2-160x160.jpg">
-            </div>
-            <div class="info">
-                <a class="d-block" href="#" sec:authentication="name"></a>
-            </div>
-        </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -31,14 +19,14 @@
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" th:href="@{/}">
                         <i class="fa-solid fa-house"></i>
-                        <p>Home</p>
+                        <p>Inicio</p>
                     </a>
                 </li>
 
                 <div sec:authorize="hasRole('Administrador')">
                     <li class="nav-item has-treeview">
                         <a class="nav-link" href="#">
-                            <i class="nav-icon fas fa-copy"></i>
+                            <i class="nav-icon fas fa-folder-open"></i>
                             <p>
                                 Casos
                                 <i class="right fas fa-angle-left"></i>
@@ -78,7 +66,7 @@
                 <div sec:authorize="hasRole('Administrador')">
                     <li class="nav-item has-treeview">
                         <a class="nav-link" href="#">
-                            <i class="nav-icon fas fa-copy"></i>
+                            <i class="nav-icon fas fa-briefcase"></i>
                             <p>
                                 Areas de Trabajo
                                 <i class="right fas fa-angle-left"></i>
@@ -124,7 +112,7 @@
                 <div sec:authorize="hasRole('Administrador')">
                     <li class="nav-item has-treeview">
                         <a class="nav-link" href="#">
-                            <i class="nav-icon fas fa-copy"></i>
+                            <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Usuarios
                                 <i class="right fas fa-angle-left"></i>
@@ -144,7 +132,7 @@
                 <div sec:authorize="hasRole('Operador')">
                     <li class="nav-item has-treeview">
                         <a class="nav-link" href="#">
-                            <i class="nav-icon fas fa-copy"></i>
+                            <i class="nav-icon fas fa-tasks"></i>
                             <p>
                                 Casos asignados
                                 <i class="right fas fa-angle-left"></i>
