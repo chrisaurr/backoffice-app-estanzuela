@@ -1,23 +1,15 @@
 <!DOCTYPE html>
 <html layout:decorate="~{shared/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
-
+    <title>INICIO</title>
 </head>
 <body>
 
-<div layout:fragment="content">
-
-    <div class="container">
-        <main style="margin-top: 5em; margin-bottom: 5em; display: flex; align-items: center; justify-content: center">
-            <img src="img/logo.jpeg" class="img-fluid" alt="fondo">
-        </main>
-    </div>
-
+<div layout:fragment="content" style="min-height: calc(100vh - 56px); display: flex; justify-content: center; align-items: center;">
+    <img src="img/logo.jpeg" class="img-fluid" alt="fondo">
 </div>
 
 <th:block layout:fragment="script">
