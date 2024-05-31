@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LISTADO DE AREAS DE TRABAJO</title>
+
+    <style>
+        .btn-group-inline {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .btn-group-inline form {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Listado de Areas de Trabajo</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-success d-flex align-items-center" data-toggle="modal" data-target="#modal-crear">
+                                <i class="fas fa-plus mr-2"></i> Nueva Area de Trabajo
+                            </button>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="container">
+                            <h1>Listado de Areas de Trabajo</h1>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="areaTrabajo : ${areaTrabajos}">
+                                    <td th:text="${areaTrabajo.id}"></td>
+                                    <td th:text="${areaTrabajo.nombre}"></td>
+                                    <td>
+                                        <div class="btn-group-inline">
+                                            <a th:href="'/area-trabajo/editar/' + ${areaTrabajo.id}" class="btn btn-primary btn-sm" onclick="editarAreaDeTrabajo(event)">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                        </div>
+                                        <div class="btn-group-inline">
+                                            <form th:id="@{'form_eliminar_' + ${areaTrabajo.id}}" th:action="@{'/area-trabajo/eliminar/' + ${areaTrabajo.getId()}}" method="post">
+                                                <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${areaTrabajo.getId()} + ')'">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="~{/area_de_trabajo/include_area_de_trabajo_listar/mdl-editar.html}"></div>
+    <div th:replace="~{/area_de_trabajo/include_area_de_trabajo_listar/mdl-crear.html}"></div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        function editarAreaDeTrabajo(event) {
+            event.preventDefault();
+            var href = event.currentTarget.getAttribute('href');
+
+            $.get(href, function (area) {
+                if (area && area.id) {
+                    var modal = $('#modal-editar');
+                    modal.find('#editar-id').val(area.id);
+                    modal.find('#editar-nombre').val(area.nombre);
+                    modal.addClass('show');
+                    modal.modal('show');
+                } else {
+                    alert('Error al obtener los datos de área de trabajo.');
+                }
+            });
+        }
+
+        const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas eliminar el registro?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>

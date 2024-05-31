@@ -1,11 +1,19 @@
 package com.umg.backoffice.modelo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.Date;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "asignacion_incidente", schema = "estanzuela", indexes = {
         @Index(name = "fk_historial_incidente_incidente1_idx", columnList = "id_incidente"),
@@ -19,7 +27,7 @@ public class AsignacionIncidente {
 
     @NotNull
     @Column(name = "fecha", nullable = false)
-    private Instant fecha;
+    private Date fecha;
 
     @NotNull
     @Column(name = "estado", nullable = false)
@@ -32,59 +40,19 @@ public class AsignacionIncidente {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_incidente", nullable = false)
+    @JsonBackReference("AsignacionIncidente")
     private Incidente idIncidente;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_usuario", nullable = false)
+    @JsonBackReference("AsignacionUsuario")
     private Usuario idUsuario;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Instant getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Instant fecha) {
-        this.fecha = fecha;
-    }
-
-    public Integer getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Integer estado) {
-        this.estado = estado;
-    }
-
-    public String getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
-    }
-
-    public Incidente getIdIncidente() {
-        return idIncidente;
-    }
-
-    public void setIdIncidente(Incidente idIncidente) {
-        this.idIncidente = idIncidente;
-    }
-
-    public Usuario getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuario idUsuario) {
-        this.idUsuario = idUsuario;
+    @PrePersist
+    private void prePersist() {
+        this.fecha = new Date();
+        this.estado = Constants.ESTADO_ACTIVO;
     }
 
 }

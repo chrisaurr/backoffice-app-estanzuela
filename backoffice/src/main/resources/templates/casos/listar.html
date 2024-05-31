@@ -1,48 +1,267 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:score="http://thymeleafexamples">
-<head th:insert="~{fragments.html :: headerContent}"></head>
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>LISTADO DE INCIDENTES</title>
+</head>
 <body>
-<div th:insert="~{fragments.html :: navegacion}"></div>
-<div class="container">
-    <main style="margin-top: 5em; margin-bottom: 5em; display: flex; align-items: center; justify-content: center">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">No DE CASO</th>
-                    <th scope="col">DESCRIPCION</th>
-                    <th scope="col">DIRECCION</th>
-                    <th scope="col">REFERENCIA</th>
-                    <th scope="col">FECHA</th>
-                    <th scope="col">CATEGORIA</th>
-                    <th scope="col">ESTADO</th>
-                    <th scope="col">ACCIONES</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="incidente: ${listadoIncidentes}">
-                    <th scope="row" th:text="${incidente.getId()}"></th>
-                    <td th:text="${incidente.getDescripcion()}"></td>
-                    <td th:text="${incidente.getDireccion()}"></td>
-                    <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
-                    <td th:text="${incidente.getFecha()}"></td>
-                    <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
-                    <td th:text="${incidente.getEstado()}"></td>
-                    <td>
-                        <div class="row">
-                            <a th:href="@{'/casos/edit/' + ${incidente.getId()}}">
-                                <button type="button" class="btn btn-outline-primary"><i class="fa-solid fa-pencil"></i> EDITAR</button>
-                            </a>
-                            <a th:href="@{'/casos/delete/' + ${incidente.getId()}}">
-                                <button type="button" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i> ELIMINAR</button>
-                            </a>
+
+
+<div layout:fragment="content">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>LISTADO DE INCIDENTES</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_descripcion">Filtrar por descripcion</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="filtro_descripcion"
+                                                name="filtro_descripcion"
+                                                th:value="${filtroDescripcion}"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_direccion">Filtrar por direccion</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="filtro_direccion"
+                                                name="filtro_direccion"
+                                                th:value="${filtroDireccion}"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_estado">Filtrar por estado</label>
+                                        <select class="form-control" name="filtro_estado" id="filtro_estado">
+                                            <option value=0 >- Seleccionar -</option>
+                                            <option th:selected="${filtroEstado == 1}" value=1 >Sin Proceso</option>
+                                            <option th:selected="${filtroEstado == 2}" value=2 >Solucionado</option>
+                                            <option th:selected="${filtroEstado == 3}" value=3 >No aplica</option>
+                                            <option th:selected="${filtroEstado == 4}" value=4 >Eliminado</option><!--se pasa 4 pero en el backend es cero ya que el cero no lo pasa, lo toma como si no hay-->
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="col-form-label" for="filtro_categoria">Filtrar por categoria</label>
+                                        <select class="form-control" name="filtro_categoria" id="filtro_categoria">
+                                            <option value=0 >- Seleccionar -</option>
+                                            <option
+                                                    th:each="categoria: ${allCategorias}"
+                                                    th:value="${categoria.getId()}"
+                                                    th:text="${categoria.getNombre()}"
+                                                    th:selected="${filtroCategoria == categoria.getId()}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label" for="filtro_fecha_inicio">Filtrar por fecha inicial</label>
+                                        <input
+                                                type="date"
+                                                class="form-control"
+                                                id="filtro_fecha_inicio"
+                                                name="filtro_fecha_inicio"
+                                                th:value="${filtroFechaInicio}"
+                                        >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label" for="filtro_fecha_final">Filtrar por fecha final</label>
+                                        <input
+                                                type="date"
+                                                class="form-control"
+                                                id="filtro_fecha_final"
+                                                name="filtro_fecha_final"
+                                                th:value="${filtroFechaFinal}"
+                                        >
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Buscar</button>
+                            </form>
+                            <hr/>
+                            <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">No DE CASO</th>
+                                    <th scope="col">DESCRIPCION</th>
+                                    <th scope="col">DIRECCION</th>
+                                    <th scope="col">REFERENCIA</th>
+                                    <th scope="col">FECHA</th>
+                                    <th scope="col">CATEGORIA</th>
+                                    <th scope="col">ESTADO</th>
+                                    <th scope="col">ACCIONES</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="incidente: ${listadoIncidentes.content}">
+                                    <th scope="row" th:text="${incidente.getId()}"></th>
+                                    <td th:text="${incidente.getDescripcion()}"></td>
+                                    <td th:text="${incidente.getDireccion()}"></td>
+                                    <td th:text="${incidente.getReferenciaDeDireccion()}"></td>
+                                    <td th:text="${#dates.format(incidente.getFecha(), 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td th:text="${incidente.getIdCategoria().getNombre()}"></td>
+                                    <td th:if="${incidente.getEstado() == 1}"><span class="badge badge-danger">Sin proceso</span></td>
+                                    <td th:if="${incidente.getEstado() == 2}"><span class="badge badge-success">Solucionado</span></td>
+                                    <td th:if="${incidente.getEstado() == 3}"><span class="badge badge-dark">No aplica</span></td>
+                                    <td>
+
+                                        <a class="btn btn-outline-primary" th:href="'/casos/detalle/' + ${incidente.getId()}">ATENDER</a>
+
+                                        <!--
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                Cambiar estado
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <form th:id="'form_solucionado_' + ${incidente.getId()}" th:action="@{'/casos/solucionado/' + ${incidente.getId()}}" method="post">
+                                                    <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoSolucionado(' + ${incidente.getId()} + ')'">Solucionado</button>
+                                                </form>
+                                                <form th:id="'form_no_aplica_' + ${incidente.getId()}" th:action="@{'/casos/no-aplica/' + ${incidente.getId()}}" method="post">
+                                                    <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoNoAplica(' + ${incidente.getId()} + ')'">No aplica</button>
+                                                </form>
+                                                <div class="dropdown-divider"></div>
+                                                <form th:id="'form_eliminar_' + ${incidente.getId()}" th:action="@{'/casos/eliminar/' + ${incidente.getId()}}" method="post">
+                                                    <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${incidente.getId()} + ')'">Eliminar</button>
+                                                </form>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" th:href="'/casos/detalle/' + ${incidente.getId()}">Ver Detalle</a>
+                                            </div>
+                                        </div>
+                                        -->
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+
+                            <ul th:if="${listadoIncidentes.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'?page=0'}" >&laquo;</a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{${dataActual}+'&page=0'}" >&laquo;</a>
+                                    <!--<a class="page-link" th:href="@{'/casos/'+${url}+'?page=0'}" >&laquo;</a>-->
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'/casos/'+${url}+'?page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/'+${url}+${dataActual}+'&page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>
+                                </li>
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{/casos/all(page=${listadoIncidentes.totalPages} - 1)}" >&raquo;</a>
+                                    <a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/buscar'+${dataActual}+'&page='+(${listadoIncidentes.totalPages} - 1)+''}" >&raquo;</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- Main content -->
+
+
 </div>
-<footer th:insert="~{fragments.html :: footer}"></footer>
-<div th:insert="~{fragments.html :: scripts}"></div>
+
+
+<th:block layout:fragment="script">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">const Swal = require('sweetalert2');</script>
+    <script type="text/javascript">
+        let actualizarEstado = "[[${actualizado} != null ? ${actualizado} : '0']]"
+        if(actualizarEstado === '1'){
+            Swal.fire({
+                title: "Caso actualizado con exito",
+                icon: "success"
+            });
+        }
+        const consultarCambiarEstadoSolucionado = id => {
+            document.getElementById('form_solucionado_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas cambiar a solucionado?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_solucionado_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+        const consultarCambiarEstadoNoAplica = id => {
+            document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas cambiar a estado no aplica?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_no_aplica_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+        const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas eliminar el registro?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+    </script>
+</th:block>
 </body>
 </html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>USUARIOS</title>
+</head>
+<body>
+
+
+<div layout:fragment="content">
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>USUARIOS</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <form id="form_buscar" method="get" th:action="@{'/casos/buscar'}">
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label class="col-form-label" for="filtro_nombre">Filtrar por Nombre</label>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="filtro_nombre"
+                            name="filtro_nombre"
+                            th:value="${filtroNombre}"
+                    >
+                  </div>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+              </form>
+              <div class="d-flex justify-content-start mb-3 mt-4">
+                <a th:href="'/usuario/nuevo'" class="btn btn-success">
+                  <i class="fas fa-user-plus mr-2"></i> Agregar nuevo
+                </a>
+              </div>
+              <div th:if="${param.usuarioexiste}">No se puede guardar el usuario con username existente en la base de datos</div>
+              <hr/>
+              <table class="table table-bordered">
+                <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">NOMBRE</th>
+                  <th scope="col">APELLIDO</th>
+                  <th scope="col">DIRECCION</th>
+                  <th scope="col">TELEFONO</th>
+                  <th scope="col">ACCIONES</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario: ${usuarios}">
+                  <th scope="row" th:text="${usuario.getId()}"></th>
+                  <td th:text="${usuario.getNombre()}"></td>
+                  <td th:text="${usuario.getApellidos()}"></td>
+                  <td th:text="${usuario.getDireccion()}"></td>
+                  <td th:text="${usuario.getTelefono()}"></td>
+                  <td>
+
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Acciones
+                      </button>
+                      <div class="dropdown-menu">
+                        <form th:id="'form_eliminar_' + ${usuario.getId()}" th:action="@{'/usuario/eliminar/' + ${usuario.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarCambiarEstadoEliminado(' + ${usuario.getId()} + ')'">Eliminar</button>
+                        </form>
+                        <form th:id="'form_editar_' + ${usuario.getId()}" th:action="@{'/usuario/editar/' + ${usuario.getId()}}" method="post">
+                          <button class="btn btn-primary dropdown-item" th:onclick="'consultarEditar(' + ${usuario.getId()} + ')'">Editar</button>
+                        </form>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <!-- Main content -->
+
+
+</div>
+
+
+<th:block layout:fragment="script">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">const Swal = require('sweetalert2');</script>
+  <script type="text/javascript">
+    let actualizarEstado = "[[${actualizado} != null ? ${actualizado} : '0']]"
+    if(actualizarEstado === '1'){
+      Swal.fire({
+        title: "Caso actualizado con exito",
+        icon: "success"
+      });
+    }
+    const consultarEditar = id => {
+      document.getElementById('form_editar_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas editar el usuario?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Editar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_editar_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+    const consultarCambiarEstadoNoAplica = id => {
+      document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas cambiar a estado no aplica?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Cambiar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_no_aplica_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+    const consultarCambiarEstadoEliminado = id => {
+      document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+        e.preventDefault();
+      });
+      Swal.fire({
+        title: "Seguro que deseas eliminar el registro?",
+        showDenyButton: true,
+        confirmButtonText: "Si, Eliminar",
+        denyButtonText: `No, Cancelar`,
+        icon: "question"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmado, procediendo", "", "success");
+          document.getElementById('form_eliminar_' + id).submit();
+        } else if (result.isDenied) {
+          Swal.fire("Cambios cancelados", "", "info");
+        }
+      });
+    }
+  </script>
+</th:block>
+</body>
+</html>

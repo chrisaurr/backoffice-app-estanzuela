@@ -1,0 +1,36 @@
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand navbar-white navbar-light" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        <!-- Messages Dropdown Menu -->
+        <li class="nav-item dropdown user-menu show" sec:authorize="isAuthenticated()">
+            <a aria-expanded="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" style="display: flex; align-items: center; padding: 0.5rem 1rem; background-color: #f8f9fa; border-radius: 5px;">
+                <i class="fas fa-user" style="margin-right: 0.5rem;"></i>
+                <span class="d-none d-md-inline" sec:authentication="name"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <!-- User Info -->
+                <li class="user-info bg-primary" style="padding: 10px; text-align: center;">
+                    <p class="mb-0" style="margin: 0;">
+                        <span sec:authentication="name" style="display: block;"></span>
+                        <small sec:authentication="principal.authorities" style="display: block;"></small>
+                    </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                    <form th:action="@{/logout}" method="post" id="logout" style="display: flex; justify-content: center;">
+                        <button type="submit" class="btn btn-danger btn-flat">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-slide="true" data-widget="control-sidebar" href="#" role="button">
+                <i class="fas fa-th-large"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+<!-- /.navbar -->

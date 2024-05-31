@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>LISTADO DE INCIDENTES</title>
+</head>
+<body>
+
+
+<div layout:fragment="content">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>LISTADO DE TAREAS</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <hr/>
+                            <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">FECHA</th>
+                                    <th scope="col">COMENTARIO</th>
+                                    <th scope="col"># CASO</th>
+                                    <th scope="col">ACCION</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="asignacion: ${listadoDeAsignaciones.content}">
+                                    <th scope="row" th:text="${asignacion.getId()}"></th>
+                                    <td th:text="${#dates.format(asignacion.getFecha(), 'dd-MM-yyyy HH:mm')}"></td>
+                                    <td th:text="${asignacion.getComentario()}"></td>
+                                    <td th:text="${asignacion.getIdIncidente.getId()}"></td>
+                                    <td>
+                                        <a class="btn btn-primary" th:href="'/casos/usuarios/detalle/' + ${asignacion.getIdIncidente.getId()}">Ver Detalle</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer clearfix">
+
+                            <ul th:if="${listadoDeAsignaciones.totalPages > 0}" class="pagination pagination-sm m-0 float-right">
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'?page=0'}" >&laquo;</a>
+                                    <!--<a th:if="${url == 'buscar'}" class="page-link" th:href="@{${dataActual}+'&page=0'}" >&laquo;</a>-->
+                                </li>
+                                <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{'/casos/usuarios/'+${url}+'?page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>
+                                    <!--<a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/'+${url}+${dataActual}+'&page='+(${pageNumber}-1)+''}"
+                                       th:text="${pageNumber}"
+                                    ></a>-->
+                                </li>
+                                <li class="page-item">
+                                    <a th:if="${url == 'all'}" class="page-link" th:href="@{/casos/usuarios/all(page=${listadoDeAsignaciones.totalPages} - 1)}" >&raquo;</a>
+                                    <!--<a th:if="${url == 'buscar'}" class="page-link" th:href="@{'/casos/buscar'+${dataActual}+'&page='+(${listadoIncidentes.totalPages} - 1)+''}" >&raquo;</a>-->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- Main content -->
+
+
+</div>
+
+
+<th:block layout:fragment="script">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">const Swal = require('sweetalert2');</script>
+    <script type="text/javascript">
+        let actualizarEstado = "[[${actualizado} != null ? ${actualizado} : '0']]"
+        if(actualizarEstado === '1'){
+            Swal.fire({
+                title: "Caso actualizado con exito",
+                icon: "success"
+            });
+        }
+        const consultarCambiarEstadoSolucionado = id => {
+            document.getElementById('form_solucionado_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas cambiar a solucionado?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_solucionado_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+        const consultarCambiarEstadoNoAplica = id => {
+            document.getElementById('form_no_aplica_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas cambiar a estado no aplica?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_no_aplica_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+        const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas eliminar el registro?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>

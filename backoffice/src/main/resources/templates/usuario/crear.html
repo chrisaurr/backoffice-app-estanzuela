@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CREAR USUARIO</title>
+
+    <style>
+        .card-body {
+            padding: 20px;
+        }
+        .form-container {
+            padding: 20px;
+        }
+        .btn-submit {
+            display: flex;
+            justify-content: center;
+        }
+        .btn-submit button {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Agregar un nuevo usuario</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body form-container">
+                            <form id="crear_nuevo" th:action="${ !isEditar ? '/usuario/crear' : '/usuario/actualizar/' + usuario?.getId() + '' }" method="post">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputNombre">Nombres</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputNombre"
+                                                name="nombre"
+                                                th:value="${usuario?.getNombre()}"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputApellidos">Apellidos</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputApellidos"
+                                                name="apellidos"
+                                                th:value="${usuario?.getApellidos()}"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputDireccion">Direccion</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputDireccion"
+                                                name="direccion"
+                                                th:value="${usuario?.getDireccion()}"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputTelefono">Telefono</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputTelefono"
+                                                name="telefono"
+                                                th:value="${usuario?.getTelefono()}"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail">Email</label>
+                                        <input
+                                                type="email"
+                                                class="form-control"
+                                                id="inputEmail"
+                                                name="email"
+                                                th:value="${usuario?.getEmail()}"
+                                                required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputUserName">Usuario</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                id="inputUserName"
+                                                name="username"
+                                                th:value="${usuario?.getUsername()}"
+                                                required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="areaTrabajo">Seleccione area de trabajo</label>
+                                        <select class="form-control" name="areaTrabajo" id="areaTrabajo">
+                                            <option
+                                                    th:each="areaTrabajo: ${listadoAreaTrabajo}"
+                                                    th:value="${areaTrabajo.getId()}"
+                                                    th:text="${areaTrabajo.getNombre()}"
+                                                    th:selected="${usuario?.getIdAreaTrabajo()?.getId() == areaTrabajo.getId()}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="role">Seleccione Rol</label>
+                                        <select class="form-control" name="idRol" id="role">
+                                            <option
+                                                    th:each="rol: ${listadoRoles}"
+                                                    th:value="${rol.getId()}"
+                                                    th:text="${rol.getNombreRol()}"
+                                                    th:selected="${usuario?.getIdRol()?.getId() == rol.getId()}"
+                                            >
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputPassword">Password</label>
+                                        <input type="password" class="form-control" id="inputPassword" name="password" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputConfirmPass">Confirme Password</label>
+                                        <input type="password" class="form-control" id="inputConfirmPass" required>
+                                    </div>
+                                </div>
+                                <div class="form-group btn-submit">
+                                    <button type="submit" th:onclick="validarPassword()" class="btn btn-primary">
+                                        <i class="fas fa-save mr-2"></i>Guardar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        const validarPassword = () => {
+            document.getElementById('crear_nuevo').addEventListener('submit', function (e){
+                e.preventDefault();
+                let password = document.getElementById('inputPassword').value;
+                let retypePassword = document.getElementById('inputConfirmPass').value;
+                if(password !== retypePassword){
+                    Swal.fire({
+                        title: "La contraseña no coincide, revise",
+                        icon: "error"
+                    });
+                }else{
+                    document.getElementById('crear_nuevo').submit();
+                }
+            });
+        }
+    </script>
+</th:block>
+
+</body>
+</html>

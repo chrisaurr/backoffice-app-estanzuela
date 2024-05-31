@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html layout:decorate="~{shared/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LISTADO DE CATEGORIAS</title>
+
+    <style>
+        .btn-group-inline {
+            display: inline-block;
+            margin-right: 5px;
+        }
+        .btn-group-inline form {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Listado de Categorias</h1>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-success d-flex align-items-center" data-toggle="modal" data-target="#modal-crear">
+                                <i class="fas fa-plus mr-2"></i> Nueva Categoria
+                            </button>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="container">
+                            <h1>Listado de Categorias</h1>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="categoria : ${categorias}">
+                                    <td th:text="${categoria.id}"></td>
+                                    <td th:text="${categoria.nombre}"></td>
+                                    <td>
+                                        <div class="btn-group-inline">
+                                            <a th:href="'/categoria/editar/' + ${categoria.id}" class="btn btn-primary btn-sm" onclick="editarCategoria(event)">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                        </div>
+                                        <div class="btn-group-inline">
+                                            <form th:id="@{'form_eliminar_' + ${categoria.id}}" th:action="@{'/categoria/eliminar/' + ${categoria.getId()}}" method="post">
+                                                <button type="submit" class="btn btn-danger btn-sm" th:onclick="'consultarCambiarEstadoEliminado(' + ${categoria.getId()} + ')'">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="~{/categoria/include_categoria_listar/mdl-editar.html}"></div>
+
+    <div th:replace="~{/categoria/include_categoria_listar/mdl-crear.html}"></div>
+
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        function editarCategoria(event) {
+            event.preventDefault();
+            // Use .closest('a') para obtener el href del enlace padre
+            var href = $(event.target).closest('a').attr('href');
+
+            $.get(href, function (categoria) {
+                if (categoria && categoria.id) {
+                    var modal = $('#modal-editar');
+                    modal.find('#editar-id').val(categoria.id);
+                    modal.find('#editar-nombre').val(categoria.nombre);
+                    modal.addClass('show');
+                    modal.modal('show');
+                } else {
+                    alert('Error al obtener los datos de la categoría.');
+                }
+            }).fail(function() {
+                alert('Error al obtener los datos de la categoría.');
+            });
+        }
+
+        const consultarCambiarEstadoEliminado = id => {
+            document.getElementById('form_eliminar_' + id).addEventListener('submit', function (e){
+                e.preventDefault();
+            });
+            Swal.fire({
+                title: "Seguro que deseas eliminar el registro?",
+                showDenyButton: true,
+                confirmButtonText: "Si, Cambiar",
+                denyButtonText: `No, Cancelar`,
+                icon: "question"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Confirmado, procediendo", "", "success");
+                    document.getElementById('form_eliminar_' + id).submit();
+                } else if (result.isDenied) {
+                    Swal.fire("Cambios cancelados", "", "info");
+                }
+            });
+        }
+    </script>
+</th:block>
+
+</body>
+</html>
