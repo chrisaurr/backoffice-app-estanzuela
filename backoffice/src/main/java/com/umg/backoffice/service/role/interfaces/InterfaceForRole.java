@@ -1,6 +1,5 @@
 package com.umg.backoffice.service.role.interfaces;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Role;
 
 import java.util.Set;

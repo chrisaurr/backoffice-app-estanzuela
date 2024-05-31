@@ -1,8 +1,6 @@
 package com.umg.backoffice.service.Notificacion.service;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Notificacion;
-import com.umg.backoffice.repository.CategoriaIncidenteRepository;
 import com.umg.backoffice.repository.NotificacionRepository;
 import com.umg.backoffice.service.Notificacion.interfaces.InterfaceForNotificacion;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package com.umg.backoffice.controller;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Role;
 import com.umg.backoffice.service.role.service.ServiceForRole;

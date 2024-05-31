@@ -1,7 +1,6 @@
 package com.umg.backoffice.controller;
 
 import com.umg.backoffice.modelo.entity.AreaTrabajo;
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.service.area_de_trabajo.service.ServiceForAreaTrabajo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller

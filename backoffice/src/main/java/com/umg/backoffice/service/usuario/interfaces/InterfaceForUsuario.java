@@ -2,7 +2,6 @@ package com.umg.backoffice.service.usuario.interfaces;
 
 import com.umg.backoffice.modelo.entity.Usuario;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

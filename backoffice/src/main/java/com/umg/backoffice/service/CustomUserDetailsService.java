@@ -2,10 +2,8 @@ package com.umg.backoffice.service;
 
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Usuario;
-import com.umg.backoffice.repository.RoleRepository;
 import com.umg.backoffice.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

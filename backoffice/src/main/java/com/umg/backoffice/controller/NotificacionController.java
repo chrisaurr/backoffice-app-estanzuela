@@ -1,15 +1,12 @@
 package com.umg.backoffice.controller;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Constants;
 import com.umg.backoffice.modelo.entity.Incidente;
 import com.umg.backoffice.modelo.entity.Notificacion;
 import com.umg.backoffice.service.Notificacion.service.NotificacionService;
-import com.umg.backoffice.service.categoria_incidente.service.CategoriaIncidenteService;
 import com.umg.backoffice.service.incidente.service.IncidenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 

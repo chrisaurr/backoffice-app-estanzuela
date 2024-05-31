@@ -1,6 +1,5 @@
 package com.umg.backoffice.repository;
 
-import com.umg.backoffice.modelo.entity.CategoriaIncidente;
 import com.umg.backoffice.modelo.entity.Notificacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 
